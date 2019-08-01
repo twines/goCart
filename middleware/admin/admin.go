@@ -1,17 +1,14 @@
 package admin
 
 import (
-	"fmt"
-	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"goCart/pkg/auth"
 	"net/http"
 )
 
 func Admin() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		session := sessions.Default(c)
-		fmt.Println(session.Get("admin"))
-		if user := session.Get("admin"); user == nil {
+		if !auth.Check(c) {
 			c.Redirect(http.StatusFound, "/admin/login")
 		}
 		c.Next()

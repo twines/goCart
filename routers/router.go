@@ -21,7 +21,7 @@ func InitRouter() *gin.Engine {
 	r.LoadHTMLGlob("resource/view/*/**/*.html")
 	r.StaticFS("/static", http.Dir("resource/static"))
 
-	store := sessions.NewCookieStore([]byte("secret"))
+	store, _ := sessions.NewRedisStore(10, "tcp", "localhost:6379", "", []byte("secret"))
 	store.Options(sessions.Options{
 		MaxAge: int(30 * time.Minute), //30min
 		Path:   "/",
