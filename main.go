@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"goCart/models"
 	"goCart/pkg/setting"
 	"goCart/routers"
 	"log"
@@ -13,7 +14,12 @@ import (
 	"time"
 )
 
+func init() {
+	setting.Setup()
+	models.Setup()
+}
 func main() {
+
 	gin.SetMode(setting.ServerSetting.RunMode)
 	router := routers.InitRouter()
 

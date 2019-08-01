@@ -8,7 +8,8 @@ import (
 
 func Login(c *gin.Context) {
 	session := sessions.Default(c)
-	session.Set("admin", 1)
+	//user := models.GetUser("test")
+	session.Set("admin", "hanyun")
 	_ = session.Save()
 	c.HTML(http.StatusOK, "admin.login", 1)
 }

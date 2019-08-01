@@ -30,9 +30,16 @@ func InitRouter() *gin.Engine {
 	{
 		adminGroup := r.Group("/admin")
 		adminGroup.Use(sessions.Sessions("goCartAdmin", store))
+
+		//admin未登录
 		{
 			adminGroup.GET("/login", admin.Login)
 			adminGroup.GET("/", admin.Index)
+		}
+		//admin已经登录
+		{
+			adminGroup.Use(admin2.Admin())
+			adminGroup.GET("/user", admin.User)
 		}
 	}
 	//web前端
@@ -46,7 +53,6 @@ func InitRouter() *gin.Engine {
 		}
 		//已经登录
 		{
-			webGroup.Use(admin2.Admin())
 			webGroup.GET("/user", web.User)
 		}
 	}
