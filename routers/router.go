@@ -10,13 +10,11 @@ import (
 	admin2 "goCart/middleware/admin"
 	"goCart/middleware/cors"
 	"goCart/middleware/jwt"
-	"goCart/pkg/setting"
 	"net/http"
 	"time"
 )
 
 func InitRouter() *gin.Engine {
-	gin.SetMode(setting.RunMode)
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())

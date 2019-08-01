@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"goCart/pkg/setting"
 	"goCart/routers"
 	"log"
@@ -13,14 +14,14 @@ import (
 )
 
 func main() {
-
+	gin.SetMode(setting.ServerSetting.RunMode)
 	router := routers.InitRouter()
 
 	s := &http.Server{
-		Addr:           fmt.Sprintf(":%d", setting.HTTPPort),
+		Addr:           fmt.Sprintf(":%d", setting.ServerSetting.HttpPort),
 		Handler:        router,
-		ReadTimeout:    setting.ReadTimeout,
-		WriteTimeout:   setting.WriteTimeout,
+		ReadTimeout:    setting.ServerSetting.ReadTimeout,
+		WriteTimeout:   setting.ServerSetting.WriteTimeout,
 		MaxHeaderBytes: 1 << 20,
 	}
 
