@@ -1,0 +1,5 @@
+.idea
+/runtime/logs/*
+/vue/node_modules
+/view/static
+/view/index/index.html
