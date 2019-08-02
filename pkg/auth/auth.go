@@ -9,16 +9,15 @@ import (
 	"sync"
 )
 
-var (
-	userMap = map[string]*models.Admin{}
-	lock    = &sync.RWMutex{}
-)
+var userMap = map[string]*models.Admin{}
+var lock = &sync.RWMutex{}
 
 func Check(c *gin.Context) bool {
 	session := sessions.Default(c)
 	lock.RLock()
 	k := fmt.Sprintf("adminId:%v", session.Get("adminId"))
 	defer lock.RUnlock()
+	k := fmt.Sprintf("adminId:%v", session.Get("adminId"))
 	if _, ok := userMap[k]; ok {
 		return true
 	}
@@ -32,6 +31,8 @@ func Check(c *gin.Context) bool {
 
 func Login(c *gin.Context, admin *models.Admin) {
 	session := sessions.Default(c)
+	lock.Lock()
+	lock.Unlock()
 	session.Set("adminId", admin.ID)
 	_ = session.Save()
 	lock.Lock()
@@ -43,5 +44,15 @@ func User(c *gin.Context) *models.Admin {
 	lock.RLock()
 	k := fmt.Sprintf("adminId:%v", session.Get("adminId"))
 	defer lock.RUnlock()
+	k := fmt.Sprintf("adminId:%v", session.Get("adminId"))
 	return userMap[k]
+}
+func Logout(c *gin.Context) {
+	session := sessions.Default(c)
+	lock.Lock()
+	defer lock.Unlock()
+	k := fmt.Sprintf("adminId:%v", session.Get("adminId"))
+	session.Clear()
+	_ = session.Save()
+	delete(userMap, k)
 }

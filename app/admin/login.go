@@ -22,6 +22,10 @@ func DoLogin(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/admin")
 	}
 }
+func Logout(c *gin.Context) {
+	auth.Logout(c)
+	c.Redirect(http.StatusFound, "/admin/login")
+}
 func Index(c *gin.Context) {
 
 }
