@@ -41,6 +41,7 @@ func InitRouter() *gin.Engine {
 		{
 			adminGroup.Use(admin2.Admin())
 			adminGroup.GET("/user", admin.User)
+			adminGroup.GET("/logout", admin.Logout)
 		}
 	}
 	//web前端
