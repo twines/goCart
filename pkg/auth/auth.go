@@ -15,7 +15,6 @@ var lock = &sync.RWMutex{}
 func Check(c *gin.Context) bool {
 	session := sessions.Default(c)
 	lock.RLock()
-	k := fmt.Sprintf("adminId:%v", session.Get("adminId"))
 	defer lock.RUnlock()
 	k := fmt.Sprintf("adminId:%v", session.Get("adminId"))
 	if _, ok := userMap[k]; ok {
@@ -42,7 +41,6 @@ func Login(c *gin.Context, admin *models.Admin) {
 func User(c *gin.Context) *models.Admin {
 	session := sessions.Default(c)
 	lock.RLock()
-	k := fmt.Sprintf("adminId:%v", session.Get("adminId"))
 	defer lock.RUnlock()
 	k := fmt.Sprintf("adminId:%v", session.Get("adminId"))
 	return userMap[k]
