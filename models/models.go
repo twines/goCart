@@ -57,6 +57,7 @@ func Setup() {
 	db.Callback().Delete().Replace("gorm:delete", deleteCallback)
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
+	go migrate()
 }
 
 // CloseDB closes database connection (unnecessary)
