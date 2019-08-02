@@ -13,7 +13,10 @@ func Login(c *gin.Context) {
 }
 func DoLogin(c *gin.Context) {
 	name := c.PostForm("name")
-	admin := models.GetAdminByName(name)
+	//admin := models.GetAdminByName(name)
+	admin := &models.Admin{UserName: name}
+	admin = admin.GetAdminByName()
+
 	fmt.Println(admin.ID)
 	if admin.ID > 0 {
 		auth.Login(c, admin)

@@ -28,12 +28,12 @@ func Check(c *gin.Context) bool {
 	return session.Get("adminId") != nil && userMap[k] != nil
 }
 
-func Login(c *gin.Context, admin models.Admin) {
+func Login(c *gin.Context, admin *models.Admin) {
 	session := sessions.Default(c)
 	session.Set("adminId", admin.ID)
 	_ = session.Save()
 	lock.Lock()
-	userMap["adminId:"+strconv.Itoa(admin.ID)] = &admin
+	userMap["adminId:"+strconv.Itoa(admin.ID)] = admin
 	lock.Unlock()
 }
 func User(c *gin.Context) *models.Admin {

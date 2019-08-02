@@ -10,13 +10,28 @@ import (
 	"time"
 )
 
-var db *gorm.DB
+var (
+	db *gorm.DB
+)
 
 type Model struct {
 	ID         int `gorm:"primary_key" json:"id"`
 	CreatedOn  int `json:"created_on"`
 	ModifiedOn int `json:"modified_on"`
 	DeletedOn  int `json:"deleted_on"`
+}
+
+func (model *Model) GetById() {
+	db.First(model, model.ID)
+}
+
+func migrate() {
+	models := []interface{}{
+		User{},
+		Admin{},
+		Auth{},
+	}
+	db.AutoMigrate(models...)
 }
 
 // Setup initializes the database instance
