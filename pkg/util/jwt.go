@@ -1,7 +1,7 @@
 package util
 
 import (
-	"goCart/pkg/setting"
+	"../../pkg/setting"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"

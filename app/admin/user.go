@@ -1,9 +1,9 @@
 package admin
 
 import (
+	"../../pkg/auth"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"goCart/pkg/auth"
 )
 
 func User(c *gin.Context) {
