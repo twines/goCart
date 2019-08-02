@@ -1,8 +1,8 @@
 package models
 
 import (
+	"../pkg/setting"
 	"fmt"
-	"goCart/pkg/setting"
 	"log"
 
 	"github.com/jinzhu/gorm"
@@ -17,6 +17,21 @@ type Model struct {
 	CreatedOn  int `json:"created_on"`
 	ModifiedOn int `json:"modified_on"`
 	DeletedOn  int `json:"deleted_on"`
+}
+
+func (model *Model) GetById() {
+	db.First(&model, &model.ID)
+}
+
+//数据库迁移
+func Migration() {
+	models := []interface {
+	}{
+		User{},
+		Admin{},
+		Auth{},
+	}
+	db.AutoMigrate(models...)
 }
 
 // Setup initializes the database instance
@@ -42,6 +57,7 @@ func Setup() {
 	db.Callback().Delete().Replace("gorm:delete", deleteCallback)
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
+	go Migration()
 }
 
 // CloseDB closes database connection (unnecessary)

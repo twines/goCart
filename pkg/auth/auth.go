@@ -1,16 +1,18 @@
 package auth
 
 import (
+	"../../models"
 	"fmt"
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"goCart/models"
 	"strconv"
 	"sync"
 )
 
-var userMap = map[string]*models.Admin{}
-var lock = &sync.RWMutex{}
+var (
+	userMap = map[string]*models.Admin{}
+	lock    = &sync.RWMutex{}
+)
 
 func Check(c *gin.Context) bool {
 	session := sessions.Default(c)
@@ -28,12 +30,12 @@ func Check(c *gin.Context) bool {
 	return session.Get("adminId") != nil && userMap[k] != nil
 }
 
-func Login(c *gin.Context, admin models.Admin) {
+func Login(c *gin.Context, admin *models.Admin) {
 	session := sessions.Default(c)
 	session.Set("adminId", admin.ID)
 	_ = session.Save()
 	lock.Lock()
-	userMap["adminId:"+strconv.Itoa(admin.ID)] = &admin
+	userMap["adminId:"+strconv.Itoa(admin.ID)] = admin
 	lock.Unlock()
 }
 func User(c *gin.Context) *models.Admin {
