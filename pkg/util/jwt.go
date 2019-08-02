@@ -1,10 +1,9 @@
 package util
 
 import (
-	"../../pkg/setting"
-	"time"
-
 	"github.com/dgrijalva/jwt-go"
+	"goCart/pkg/setting"
+	"time"
 )
 
 var jwtSecret = []byte(setting.AppSetting.JwtSecret)

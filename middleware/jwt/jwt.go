@@ -1,8 +1,8 @@
 package jwt
 
 import (
-	"../../pkg/e"
-	"../../pkg/util"
+	"goCart/pkg/e"
+	"goCart/pkg/util"
 	"net/http"
 	"time"
 

@@ -1,9 +1,9 @@
 package util
 
 import (
-	"../../pkg/setting"
 	"github.com/Unknwon/com"
 	"github.com/gin-gonic/gin"
+	"goCart/pkg/setting"
 )
 
 // GetPage get page parameters

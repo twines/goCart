@@ -1,8 +1,8 @@
 package admin
 
 import (
-	"../../pkg/auth"
 	"github.com/gin-gonic/gin"
+	"goCart/pkg/auth"
 	"net/http"
 )
 

@@ -1,15 +1,15 @@
 package routers
 
 import (
-	"../app/admin"
-	"../app/api"
-	"../app/api/v1"
-	"../app/web"
-	admin2 "../middleware/admin"
-	"../middleware/cors"
-	"../middleware/jwt"
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"goCart/app/admin"
+	"goCart/app/api"
+	"goCart/app/api/v1"
+	"goCart/app/web"
+	admin2 "goCart/middleware/admin"
+	"goCart/middleware/cors"
+	"goCart/middleware/jwt"
 	"net/http"
 	"time"
 )
@@ -41,7 +41,6 @@ func InitRouter() *gin.Engine {
 		{
 			adminGroup.Use(admin2.Admin())
 			adminGroup.GET("/user", admin.User)
-			adminGroup.GET("/logout", admin.Logout)
 		}
 	}
 	//web前端

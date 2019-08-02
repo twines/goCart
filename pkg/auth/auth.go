@@ -1,10 +1,10 @@
 package auth
 
 import (
-	"../../models"
 	"fmt"
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"goCart/models"
 	"strconv"
 	"sync"
 )

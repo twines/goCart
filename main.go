@@ -1,12 +1,13 @@
 package main
 
 import (
-	"./models"
-	"./pkg/setting"
-	"./routers"
 	"context"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"goCart/models"
+	"goCart/pkg/logging"
+	"goCart/pkg/setting"
+	"goCart/routers"
 	"log"
 	"net/http"
 	"os"
@@ -17,6 +18,7 @@ import (
 func init() {
 	setting.Setup()
 	models.Setup()
+	logging.Setup()
 }
 func main() {
 
