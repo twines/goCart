@@ -10,7 +10,10 @@ import (
 
 func Login(c *gin.Context) {
 
-	c.HTML(http.StatusOK, "admin.login", 1)
+	c.HTML(http.StatusOK, "admin.login", map[string]interface{}{
+		"info": "用户名或密码错误",
+		"code": http.StatusFound,
+	})
 }
 func adminValid(c *gin.Context) (models.Admin, error) {
 	var admin models.Admin
@@ -20,15 +23,16 @@ func adminValid(c *gin.Context) (models.Admin, error) {
 func DoLogin(c *gin.Context) {
 	admin, err := adminValid(c)
 	if err != nil {
-		c.Redirect(http.StatusNonAuthoritativeInfo, "/admin")
+		c.Redirect(http.StatusFound, "/admin/login")
 		return
 	}
 
-	(&admin).GetAdminByName()
-	fmt.Println(admin.ID)
-	if admin.ID > 0 {
+	if models.CheckAvailable(admin) {
+		fmt.Println(admin.ID)
 		auth.Login(c, &admin)
 		c.Redirect(http.StatusFound, "/admin/product/list")
+	} else {
+		c.Redirect(http.StatusFound, "/admin/login")
 	}
 }
 func Index(c *gin.Context) {

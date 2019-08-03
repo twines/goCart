@@ -18,6 +18,15 @@ func (admin *Admin) GetAdminByName() *Admin {
 	db.First(admin, "user_name=?", admin.UserName)
 	return admin
 }
+
+func CheckAvailable(admin Admin) bool {
+	var loginUser Admin
+	db.First(&loginUser, "user_name=? and password=?", admin.UserName, admin.Password)
+	if loginUser.UserName == admin.UserName && loginUser.Password == admin.Password {
+		return true
+	}
+	return false
+}
 func GetAdminById(id int) Admin {
 	var admin Admin
 	db.First(&admin, id)
