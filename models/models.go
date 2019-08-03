@@ -15,12 +15,15 @@ var (
 )
 
 type Model struct {
-	ID         int `gorm:"primary_key" json:"id"`
-	CreatedOn  int `json:"created_on"`
-	ModifiedOn int `json:"modified_on"`
-	DeletedOn  int `json:"deleted_on"`
+	ID        uint64    `json:"id" gorm:"primary_key"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	DeletedAt time.Time `json:"deleted_at"`
 }
 
+func DB() *gorm.DB {
+	return db
+}
 func (model *Model) GetById() {
 	db.First(model, model.ID)
 }
@@ -30,6 +33,7 @@ func migrate() {
 		User{},
 		Admin{},
 		Auth{},
+		Product{},
 	}
 	db.AutoMigrate(models...)
 }
@@ -51,7 +55,8 @@ func Setup() {
 		return setting.DatabaseSetting.TablePrefix + defaultTableName
 	}
 
-	db.SingularTable(true)
+	//migrate()// 不让他自动创建表，因为float不可以为无符号型的数据
+	//db.SingularTable(true) // 如果设置为true,`User`的默认表名为`user`,使用`TableName`设置的表名不受影响
 	db.Callback().Create().Replace("gorm:update_time_stamp", updateTimeStampForCreateCallback)
 	db.Callback().Update().Replace("gorm:update_time_stamp", updateTimeStampForUpdateCallback)
 	db.Callback().Delete().Replace("gorm:delete", deleteCallback)

@@ -35,7 +35,7 @@ func Login(c *gin.Context, admin *models.Admin) {
 	session.Set("adminId", admin.ID)
 	_ = session.Save()
 	lock.Lock()
-	userMap["adminId:"+strconv.Itoa(admin.ID)] = admin
+	userMap["adminId:"+fmt.Sprintf("%v", admin.ID)] = admin
 	lock.Unlock()
 }
 func User(c *gin.Context) *models.Admin {

@@ -1,0 +1,72 @@
+{{define "admin.product.list"}}
+    {{template "admin.app" .}}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                商品管理
+                <small>商品列表</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="/admin"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li><a href="/admin/product/list">商品管理</a></li>
+                <li class="active">商品列表</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-body">
+                            <table class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>id</th>
+                                    <th>名称</th>
+                                    <th class="col-md-1 col-sm-1">价格（￥）</th>
+                                    <th>Sku</th>
+                                    <th>库存(个)</th>
+                                    <th>状态</th>
+                                    <th class="col-md-2">管理</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {{range $k,$product:=.productList}}
+                                    <tr>
+                                        <td>{{$product.ID}}</td>
+                                        <td>
+                                            {{$product.ProductName}}
+                                        </td>
+                                        <td>{{$product.Price}}</td>
+                                        <td>{{$product.Sku}}</td>
+                                        <td>100</td>
+                                        <td>下架</td>
+                                        <td>
+                                            <button class="btn btn-danger">下架</button>
+                                            <button class="btn btn-info">编辑</button>
+                                            <button class="btn btn-primary">查看</button>
+                                        </td>
+                                    </tr>
+                                {{end}}
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+            <div class="row text-center">
+                {{.paginate}}
+            </div>
+        </section>
+        <!-- /.content -->
+    </div>
+    {{template "admin.footer"}}
+{{end}}
