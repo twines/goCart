@@ -10,10 +10,26 @@ import (
 
 func Login(c *gin.Context) {
 
-	c.HTML(http.StatusOK, "admin.login", map[string]interface{}{
-		"info": "用户名或密码错误",
-		"code": http.StatusFound,
-	})
+	//密码或者用户名错误
+	if userInputError(c) {
+		return
+	}
+	c.HTML(http.StatusOK, "admin.login", 1)
+}
+func userInputError(c *gin.Context) bool {
+
+	code := c.Query("code")
+
+	if code == "451" {
+		info := c.Query("info")
+
+		c.HTML(http.StatusOK, "admin.login", map[string]interface{}{
+			"info": info,
+			"code": code,
+		})
+		return true
+	}
+	return false
 }
 func adminValid(c *gin.Context) (models.Admin, error) {
 	var admin models.Admin
@@ -32,7 +48,7 @@ func DoLogin(c *gin.Context) {
 		auth.Login(c, &admin)
 		c.Redirect(http.StatusFound, "/admin/product/list")
 	} else {
-		c.Redirect(http.StatusFound, "/admin/login")
+		c.Redirect(http.StatusFound, "/admin/login?code=451&info=用户名或者密码错误")
 	}
 }
 func Index(c *gin.Context) {

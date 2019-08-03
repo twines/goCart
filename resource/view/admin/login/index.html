@@ -86,12 +86,28 @@
         });
 
         function userUnValid() {
-            var code = {{.code}};
-            var info = {{.info}};
-            alert(info);
+            var infoView = `<div  class="alert alert-warning">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong>警告!</strong> {{.info}}
+  </div>`;
+            var loginBox = document.getElementsByClassName("login-box-body")[0];
+            console.log(loginBox);
+            loginBox.innerHTML += infoView;
+
+            function out() {
+                var iview = document.getElementsByClassName("alert alert-warning")[0];
+                console.log(iview);
+                loginBox.removeChild(iview);
+            }
+
+            setTimeout(out, 2000);
+
         }
 
-        userUnValid();
+        var code = {{.code}};
+        if (code === 451) {
+            userUnValid();
+        }
     </script>
     </body>
     </html>
