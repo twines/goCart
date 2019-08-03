@@ -6,6 +6,7 @@ import (
 	"goCart/models"
 	"goCart/pkg/auth"
 	"net/http"
+	"net/url"
 )
 
 func Login(c *gin.Context) {
@@ -43,12 +44,18 @@ func DoLogin(c *gin.Context) {
 		return
 	}
 
-	if models.CheckAvailable(admin) {
+	if models.CheckAvailable(&admin) {
 		fmt.Println(admin.ID)
 		auth.Login(c, &admin)
 		c.Redirect(http.StatusFound, "/admin/product/list")
 	} else {
-		c.Redirect(http.StatusFound, "/admin/login?code=451&info=用户名或者密码错误")
+		///admin/login?code=451&info=用户名或者密码错误
+		query := url.Values{}
+		query.Add("info", "用户名或者密码错误")
+		query.Add("code", "451")
+		q := query.Encode()
+		redirect := fmt.Sprintf("/admin/login?%v", q)
+		c.Redirect(http.StatusFound, redirect)
 	}
 }
 func Index(c *gin.Context) {

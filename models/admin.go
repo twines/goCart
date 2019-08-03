@@ -1,5 +1,7 @@
 package models
 
+import "goCart/pkg/util"
+
 type Admin struct {
 	Model
 	UserName string `json:"user_name" form:"name"  binding:"required"`
@@ -19,10 +21,11 @@ func (admin *Admin) GetAdminByName() *Admin {
 	return admin
 }
 
-func CheckAvailable(admin Admin) bool {
+func CheckAvailable(admin *Admin) bool {
 	var loginUser Admin
-	db.First(&loginUser, "user_name=? and password=?", admin.UserName, admin.Password)
-	if loginUser.UserName == admin.UserName && loginUser.Password == admin.Password {
+	db.First(&loginUser, "user_name=? and password=?", admin.UserName, util.EncodeMD5(admin.Password))
+	if loginUser.UserName == admin.UserName && loginUser.Password == util.EncodeMD5(admin.Password) {
+		admin.Password = loginUser.Password
 		return true
 	}
 	return false

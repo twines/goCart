@@ -6,9 +6,10 @@ import (
 )
 
 // EncodeMD5 md5 encryption
-func EncodeMD5(value string) string {
+func EncodeMD5(value string) (md string) {
 	m := md5.New()
 	m.Write([]byte(value))
 
-	return hex.EncodeToString(m.Sum(nil))
+	md = hex.EncodeToString(m.Sum(nil))
+	return md
 }
