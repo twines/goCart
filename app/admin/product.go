@@ -1,8 +1,8 @@
 package admin
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
+	"goCart/pkg/util"
 	"goCart/service/admin"
 	"net/http"
 )
@@ -13,7 +13,6 @@ var (
 
 func GetProductList(c *gin.Context) {
 	productList := productService.GetProduct()
-	number := productService.GetProductNumber()
-	fmt.Println(number)
-	c.HTML(http.StatusOK, "admin.product.list", gin.H{"productList": productList, "title": "商品列表"})
+	paginate := util.Paginate{TotalNumber: 500, Context: c, Params: map[string]interface{}{"a": 1, "b": "bbbbbb"}}
+	c.HTML(http.StatusOK, "admin.product.list", gin.H{"productList": productList, "title": "商品列表", "paginate": paginate.Paginate()})
 }
