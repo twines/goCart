@@ -13,6 +13,6 @@ var (
 
 func GetProductList(c *gin.Context) {
 	productList := productService.GetProduct()
-	paginate := util.Paginate{TotalNumber: 500, Context: c, Params: map[string]interface{}{"a": 1, "b": "bbbbbb"}}
+	paginate := util.Paginate{TotalNumber: 200, Context: c, Params: map[string]interface{}{"a": 1, "b": "bbbbbb"}}
 	c.HTML(http.StatusOK, "admin.product.list", gin.H{"productList": productList, "title": "商品列表", "paginate": paginate.Paginate()})
 }
