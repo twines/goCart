@@ -9,18 +9,26 @@ import (
 )
 
 func Login(c *gin.Context) {
+
 	c.HTML(http.StatusOK, "admin.login", 1)
 }
+func adminValid(c *gin.Context) (models.Admin, error) {
+	var admin models.Admin
+	err := c.ShouldBind(&admin)
+	return admin, err
+}
 func DoLogin(c *gin.Context) {
-	name := c.PostForm("name")
-	//admin := models.GetAdminByName(name)
-	admin := &models.Admin{UserName: name}
-	admin = admin.GetAdminByName()
+	admin, err := adminValid(c)
+	if err != nil {
+		c.Redirect(http.StatusNonAuthoritativeInfo, "/admin")
+		return
+	}
 
+	(&admin).GetAdminByName()
 	fmt.Println(admin.ID)
 	if admin.ID > 0 {
-		auth.Login(c, admin)
-		c.Redirect(http.StatusFound, "/admin")
+		auth.Login(c, &admin)
+		c.Redirect(http.StatusFound, "/admin/product/list")
 	}
 }
 func Index(c *gin.Context) {

@@ -2,7 +2,8 @@ package models
 
 type Admin struct {
 	Model
-	UserName string `json:"user_name"`
+	UserName string `json:"user_name" form:"name"  binding:"required"`
+	Password string `json:"password" form:"password"  binding:"required"`
 }
 
 //&Admin{}.GetAdminById()
