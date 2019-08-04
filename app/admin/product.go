@@ -1,23 +1,46 @@
 package admin
 
 import (
+	"github.com/Unknwon/com"
 	"github.com/gin-gonic/gin"
+	"goCart/models"
 	"goCart/pkg/util"
 	"goCart/service/admin"
 	"net/http"
 )
 
 var (
-	productService = serviceAdmin.ProductService{}
+	productService serviceAdmin.ProductService = &serviceAdmin.ProductServiceImp{}
 )
 
 func PostChangeProductStatus(c *gin.Context) {
-	result := productService.PostChangeProductStatus(c)
+	type ProductChangeForm struct {
+		CategoryId string               `form:"category_id" binding:"required`
+		Pid        string               `form:"pid" binding:"required`
+		Status     models.ProductStatus `form:"status" binding:"required`
+	}
 
 	type ProductChangeResult struct {
 		Msg    string "success"
-		Result bool
+		Result interface{}
+		Code   int
 	}
+	result := ProductChangeResult{Code: 0}
+
+	var pForm ProductChangeForm
+	if err := c.ShouldBind(&pForm); err != nil {
+		result.Msg = err.Error()
+		result.Code = 1
+	} else {
+		var productForm models.Product
+		models.DB().First(&productForm, "category_id=? and id=? ", pForm.CategoryId, pForm.Pid)
+		if com.ToStr(productForm.ID) == pForm.Pid && com.ToStr(productForm.CategoryId) == pForm.CategoryId {
+			productForm.Status = pForm.Status
+			affected := productService.PostChangeProductStatusBy(&productForm)
+			result.Result = affected
+		}
+	}
+
 	c.JSON(http.StatusOK, ProductChangeResult{Result: result})
 }
 func GetProductList(c *gin.Context) {

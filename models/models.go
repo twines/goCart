@@ -21,6 +21,9 @@ type Model struct {
 	DeletedAt time.Time `json:"deleted_at"`
 }
 
+func Default() Model {
+	return Model{CreatedAt: time.Now(), UpdatedAt: time.Now()}
+}
 func DB() *gorm.DB {
 	return db
 }
@@ -30,10 +33,10 @@ func (model *Model) GetById() {
 
 func migrate() {
 	models := []interface{}{
-		User{},
+		User{Model: Default()},
 		Admin{},
 		Auth{},
-		Product{},
+		Product{Model: Default()},
 	}
 	db.AutoMigrate(models...)
 }
