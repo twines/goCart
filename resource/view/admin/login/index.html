@@ -95,6 +95,8 @@
             loginBox.innerHTML += infoView;
 
             function out() {
+                $(".alert").alert('close');
+                return;
                 var iview = document.getElementsByClassName("alert alert-warning")[0];
                 console.log(iview);
                 loginBox.removeChild(iview);
