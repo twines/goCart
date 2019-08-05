@@ -13,12 +13,15 @@ import (
 func LoginError(c *gin.Context) {
 	//密码或者用户名错误
 	ss := sessions.Default(c)
-	msg:= ss.Get("msg")
+	msg := ss.Get("msg")
+	log.Printf("跳转信息", msg)
+	if msg == nil {
+		msg = "用户账户密码或者用户名错误"
+	}
 	ss.Delete("msg")
-	log.Printf("跳转信息",msg)
 
 	c.HTML(http.StatusOK, "admin.loginError", map[string]string{
-		"info": fmt.Sprintf("%v",msg),
+		"info": fmt.Sprintf("%v", msg),
 	})
 
 }
@@ -52,14 +55,17 @@ func DoLogin(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/admin/login")
 		return
 	}
-
-	if models.CheckAvailable(&admin) {
+	msg, ok := "", false
+	if msg, ok = models.CheckAvailable(&admin); ok {
 		fmt.Println(admin.ID)
 		auth.Login(c, &admin)
 		c.Redirect(http.StatusFound, "/admin/product/list")
-	} else {
+	}
+	if ok == false {
 		ss := sessions.Default(c)
-		ss.Set("msg", fmt.Sprintf("用户%v账户密码或者用户名错误", admin.UserName))
+		ss.Set("msg", msg)
+		ss.Save()
+		log.Println(msg)
 		c.Redirect(http.StatusFound, "/admin/lognierror")
 	}
 }

@@ -21,14 +21,28 @@ func (admin *Admin) GetAdminByName() *Admin {
 	return admin
 }
 
-func CheckAvailable(admin *Admin) bool {
+func CheckAvailable(admin *Admin) (string, bool) {
 	var loginUser Admin
-	db.First(&loginUser, "user_name=? and password=?", admin.UserName, util.EncodeMD5(admin.Password))
-	if loginUser.UserName == admin.UserName && loginUser.Password == util.EncodeMD5(admin.Password) {
-		admin.Password = loginUser.Password
-		return true
+	if len(admin.UserName) == 0 {
+		return "用户名不能为空",false
 	}
-	return false
+	if len(admin.Password) == 0 {
+		return "用户密码不能为空",false
+	}
+	db.First(&loginUser, "user_name=?", admin.UserName)
+
+	//&& loginUser.Password == util.EncodeMD5(admin.Password)
+	if loginUser.UserName != admin.UserName  {
+		return  "用户不存在",false
+		//admin.Password = loginUser.Password
+		//return nil,true
+	}else {
+		if loginUser.Password != util.EncodeMD5(admin.Password){
+			return  "用户密码错误",false
+		}else {
+			return  "用户合法可以登录",true
+		}
+	}
 }
 func GetAdminById(id int) Admin {
 	var admin Admin

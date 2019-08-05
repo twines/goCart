@@ -36,7 +36,7 @@ func InitRouter() *gin.Engine {
 			adminGroup.GET("/login", admin.Login)
 			adminGroup.POST("/login", admin.DoLogin)
 			adminGroup.GET("/", admin.Index)
-			adminGroup.GET("/lognierror",admin.LoginError)
+			adminGroup.GET("/lognierror", admin.LoginError)
 
 		}
 		//admin已经登录
