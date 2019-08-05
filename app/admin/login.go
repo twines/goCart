@@ -2,19 +2,28 @@ package admin
 
 import (
 	"fmt"
+	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"goCart/models"
 	"goCart/pkg/auth"
+	"log"
 	"net/http"
-	"net/url"
 )
 
+func LoginError(c *gin.Context) {
+	//密码或者用户名错误
+	ss := sessions.Default(c)
+	msg:= ss.Get("msg")
+	ss.Delete("msg")
+	log.Printf("跳转信息",msg)
+
+	c.HTML(http.StatusOK, "admin.loginError", map[string]string{
+		"info": fmt.Sprintf("%v",msg),
+	})
+
+}
 func Login(c *gin.Context) {
 
-	//密码或者用户名错误
-	if userInputError(c) {
-		return
-	}
 	c.HTML(http.StatusOK, "admin.login", 1)
 }
 func userInputError(c *gin.Context) bool {
@@ -49,13 +58,9 @@ func DoLogin(c *gin.Context) {
 		auth.Login(c, &admin)
 		c.Redirect(http.StatusFound, "/admin/product/list")
 	} else {
-		///admin/login?code=451&info=用户名或者密码错误
-		query := url.Values{}
-		query.Add("info", "用户名或者密码错误")
-		query.Add("code", "451")
-		q := query.Encode()
-		redirect := fmt.Sprintf("/admin/login?%v", q)
-		c.Redirect(http.StatusFound, redirect)
+		ss := sessions.Default(c)
+		ss.Set("msg", fmt.Sprintf("用户%v账户密码或者用户名错误", admin.UserName))
+		c.Redirect(http.StatusFound, "/admin/lognierror")
 	}
 }
 func Index(c *gin.Context) {
