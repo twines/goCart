@@ -2,10 +2,12 @@ package admin
 
 import (
 	"github.com/Unknwon/com"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"goCart/models"
 	"goCart/pkg/util"
 	"goCart/service/admin"
+	"log"
 	"net/http"
 )
 
@@ -43,8 +45,63 @@ func PostChangeProductStatus(c *gin.Context) {
 
 	c.JSON(http.StatusOK, ProductChangeResult{Result: result})
 }
+func PostProductEdit(c *gin.Context) {
+	ss := sessions.Default(c)
+	ss.Delete("code")
+	ss.Delete("msg")
+	type productEditForm struct {
+		ID    uint64  `form:"ID"`
+		Name  string  `form:"name"`
+		Price float32 `form:"price"`
+		Sku   string  `form:"sku"`
+		Stock uint64  `form:"stock"`
+	}
+	var form productEditForm
+
+	code, msg := 0, ""
+
+	if err := c.ShouldBind(&form); err != nil {
+		log.Println(err.Error())
+		code = 0
+		msg = err.Error()
+	} else {
+		product := models.Product{Model: models.Model{ID: form.ID}}
+
+		models.DB().First(&product)
+		rev, ok := productService.PostSaveProductEdit(form.ID, models.Product{
+			Price:       form.Price,
+			Sku:         form.Sku,
+			ProductName: form.Name,
+			Stock:       form.Stock})
+
+		if ok {
+			//c.Redirect(http.StatusFound, "/admin/product/list")
+			code = 1
+		} else {
+			code = 0
+		}
+		msg = rev
+
+		ss.Set("code", code)
+		ss.Set("msg", msg)
+		ss.Save()
+	}
+
+	c.Redirect(http.StatusFound, "/admin/product/list")
+
+	log.Println(form)
+}
 func GetProductList(c *gin.Context) {
 	productList := productService.GetProduct()
 	paginate := util.Paginate{TotalNumber: 200, Context: c, Params: map[string]interface{}{"a": 1, "b": "bbbbbb"}}
-	c.HTML(http.StatusOK, "admin.product.list", gin.H{"productList": productList, "title": "商品列表", "paginate": paginate.Paginate()})
+	ss := sessions.Default(c)
+	code := 0
+	msg, ok := ss.Get("msg").(string)
+	if ok {
+		code = 1
+	}
+	ss.Delete("code")
+	ss.Delete("msg")
+	ss.Save()
+	c.HTML(http.StatusOK, "admin.product.list", gin.H{"code": code, "msg": msg, "productList": productList, "title": "商品列表", "paginate": paginate.Paginate()})
 }

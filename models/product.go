@@ -15,4 +15,5 @@ type Product struct {
 	Img         string        `json:"img"`
 	Price       float32       `json:"price"`
 	Status      ProductStatus `json:"status" gorm:status;not null`
+	Stock       uint64        `json:"stock"default 0`
 }
