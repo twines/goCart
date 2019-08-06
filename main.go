@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/gob"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"goCart/models"
@@ -21,7 +22,9 @@ func init() {
 	logging.Setup()
 }
 func main() {
-
+	gob.Register(map[interface{}]interface{}{})
+	gob.Register(models.Admin{})
+	gob.Register(models.User{})
 	gin.SetMode(setting.ServerSetting.RunMode)
 	router := routers.InitRouter()
 

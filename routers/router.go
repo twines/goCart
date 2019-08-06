@@ -1,7 +1,8 @@
 package routers
 
 import (
-	"github.com/gin-gonic/contrib/sessions"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
 	"goCart/app/admin"
 	"goCart/app/api"
@@ -21,7 +22,7 @@ func InitRouter() *gin.Engine {
 	r.LoadHTMLGlob("resource/view/*/**/*.html")
 	r.StaticFS("/static", http.Dir("resource/static"))
 
-	store, _ := sessions.NewRedisStore(10, "tcp", "localhost:6379", "", []byte("secret"))
+	store, _ := redis.NewStore(10, "tcp", "localhost:6379", "", []byte("secret"))
 	store.Options(sessions.Options{
 		MaxAge: int(30 * time.Minute), //30min
 		Path:   "/",

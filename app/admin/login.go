@@ -58,13 +58,13 @@ func DoLogin(c *gin.Context) {
 	msg, ok := "", false
 	if msg, ok = models.CheckAvailable(&admin); ok {
 		fmt.Println(admin.ID)
-		auth.Login(c, &admin)
+		auth.Login(c, admin)
 		c.Redirect(http.StatusFound, "/admin/product/list")
 	}
 	if ok == false {
 		ss := sessions.Default(c)
 		ss.Set("msg", msg)
-		ss.Save()
+		_ = ss.Save()
 		log.Println(msg)
 		c.Redirect(http.StatusFound, "/admin/lognierror")
 	}

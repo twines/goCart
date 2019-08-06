@@ -1,56 +1,29 @@
 package auth
 
 import (
-	"fmt"
-	"github.com/gin-gonic/contrib/sessions"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"goCart/models"
-	"strconv"
-	"sync"
 )
-
-var userMap = map[string]*models.Admin{}
-var lock = &sync.RWMutex{}
 
 func Check(c *gin.Context) bool {
 	session := sessions.Default(c)
-	lock.RLock()
-	defer lock.RUnlock()
-	k := fmt.Sprintf("adminId:%v", session.Get("adminId"))
-	if _, ok := userMap[k]; ok {
-		return true
-	}
-	if id := session.Get("adminId"); id != nil {
-		adminId, _ := strconv.Atoi(fmt.Sprintf("%v", id))
-		admin := models.GetAdminById(adminId)
-		userMap[k] = &admin
-	}
-	return session.Get("adminId") != nil && userMap[k] != nil
+	return session.Get("admin") != nil
 }
 
-func Login(c *gin.Context, admin *models.Admin) {
+func Login(c *gin.Context, admin models.Admin) {
+
 	session := sessions.Default(c)
-	lock.Lock()
-	lock.Unlock()
-	session.Set("adminId", admin.ID)
+	session.Set("admin", admin)
 	_ = session.Save()
-	lock.Lock()
-	userMap["adminId:"+fmt.Sprintf("%v", admin.ID)] = admin
-	lock.Unlock()
 }
-func User(c *gin.Context) *models.Admin {
+func User(c *gin.Context) models.Admin {
 	session := sessions.Default(c)
-	lock.RLock()
-	defer lock.RUnlock()
-	k := fmt.Sprintf("adminId:%v", session.Get("adminId"))
-	return userMap[k]
+	admin := session.Get("admin")
+	return admin.(models.Admin)
 }
 func Logout(c *gin.Context) {
 	session := sessions.Default(c)
-	lock.Lock()
-	defer lock.Unlock()
-	k := fmt.Sprintf("adminId:%v", session.Get("adminId"))
-	session.Clear()
+	session.Delete("admin")
 	_ = session.Save()
-	delete(userMap, k)
 }

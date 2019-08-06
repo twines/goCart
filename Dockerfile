@@ -8,4 +8,6 @@ RUN go get -u github.com/gin-gonic/gin \
      && go get -u github.com/jinzhu/gorm/dialects/mysql \
      && go get -u github.com/jinzhu/gorm \
      && go get -u gopkg.in/go-playground/validator.v9
+     && go get -u github.com/gin-contrib/sessions
+     && go get -u github.com/gin-contrib/sessions/redis
 RUN go run main.go
