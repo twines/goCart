@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"goCart/models"
-	"goCart/pkg/logging"
 	"goCart/pkg/setting"
 	"goCart/routers"
 	"log"
@@ -19,7 +18,6 @@ import (
 func init() {
 	setting.Setup()
 	models.Setup()
-	logging.Setup()
 }
 func main() {
 	gob.Register(map[interface{}]interface{}{})

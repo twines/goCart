@@ -4,17 +4,11 @@ import (
 	"goCart/models"
 )
 
-type ProductService interface {
-	PostChangeProductStatusBy(result *models.Product) bool
-	GetProduct() []*models.Product
-	GetProductNumber() int
-	PostSaveProductEdit(id uint64, product models.Product) (string, bool)
+type ProductService struct {
 }
 
-type ProductServiceImp struct {
-}
-
-func (ps *ProductServiceImp) PostSaveProductEdit(id uint64, product models.Product) (string, bool) {
+//不建议直接在service层返回错误信息，最好用状态码的形式返回
+func (ps *ProductService) PostSaveProductEdit(id uint64, product models.Product) (string, bool) {
 	model := models.Product{}
 	models.DB().First(&model, "ID=?", id)
 	if model.ID <= 0 || model.ID != id {
@@ -27,16 +21,30 @@ func (ps *ProductServiceImp) PostSaveProductEdit(id uint64, product models.Produ
 		return rv.Error.Error(), false
 	}
 }
-func (ps *ProductServiceImp) PostChangeProductStatusBy(result *models.Product) bool {
+
+func (ps *ProductService) GetProductById(id int) models.Product {
+	var product models.Product
+	return product
+}
+func (ps *ProductService) GetProductByName(id int) models.Product {
+	var product models.Product
+	return product
+}
+func (ps *ProductService) UpdateProduct(id int, product models.Product) bool {
+	//return true
+	return false
+}
+
+func (ps *ProductService) PostChangeProductStatusBy(result *models.Product) bool {
 	affected := models.DB().Model(&result).UpdateColumn("status", result.Status).RowsAffected > 0
 	return affected
 }
-func (ps *ProductServiceImp) GetProduct() []*models.Product {
+func (ps *ProductService) GetProduct() []*models.Product {
 	var productList []*models.Product
 	models.DB().Find(&productList)
 	return productList
 }
-func (ps *ProductServiceImp) GetProductNumber() int {
+func (ps *ProductService) GetProductNumber() int {
 	var product models.Product
 	var number int
 	models.DB().Find(&product).Count(&number)

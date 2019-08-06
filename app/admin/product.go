@@ -12,7 +12,7 @@ import (
 )
 
 var (
-	productService serviceAdmin.ProductService = &serviceAdmin.ProductServiceImp{}
+	productService = &serviceAdmin.ProductService{}
 )
 
 func PostChangeProductStatus(c *gin.Context) {
@@ -45,6 +45,17 @@ func PostChangeProductStatus(c *gin.Context) {
 
 	c.JSON(http.StatusOK, ProductChangeResult{Result: result})
 }
+
+func UpdateProduct(c *gin.Context) {
+	//先查询  找到了更新 没有找到就返回错误
+	product := productService.GetProductById(1)
+	if product.ID == 0 {
+		//错误
+	}
+	productService.UpdateProduct(1, models.Product{})
+
+}
+
 func PostProductEdit(c *gin.Context) {
 	ss := sessions.Default(c)
 	ss.Delete("code")
