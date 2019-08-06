@@ -55,24 +55,20 @@ func UpdateProduct(c *gin.Context) {
 	productService.UpdateProduct(1, models.Product{})
 
 }
-
 func PostProductEdit(c *gin.Context) {
 	ss := sessions.Default(c)
 	ss.Delete("code")
 	ss.Delete("msg")
-	type productEditForm struct {
-		ID    uint64  `form:"ID"`
-		Name  string  `form:"name"`
-		Price float32 `form:"price"`
-		Sku   string  `form:"sku"`
-		Stock uint64  `form:"stock"`
-	}
-	var form productEditForm
+
+	var form models.Product
 
 	code, msg := 0, ""
 
 	if err := c.ShouldBind(&form); err != nil {
+		m := form.GetError(err)
+		log.Println(m)
 		log.Println(err.Error())
+
 		code = 0
 		msg = err.Error()
 	} else {
@@ -82,7 +78,7 @@ func PostProductEdit(c *gin.Context) {
 		rev, ok := productService.PostSaveProductEdit(form.ID, models.Product{
 			Price:       form.Price,
 			Sku:         form.Sku,
-			ProductName: form.Name,
+			ProductName: form.ProductName,
 			Stock:       form.Stock})
 
 		if ok {
