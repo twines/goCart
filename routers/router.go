@@ -47,6 +47,7 @@ func InitRouter() *gin.Engine {
 			adminGroup.GET("/product/list", admin.GetProductList)
 			adminGroup.POST("/product/off", admin.PostChangeProductStatus)
 			adminGroup.POST("/product/edit", admin.PostProductEdit)
+			adminGroup.GET("/error", admin.ParamaterError)
 		}
 	}
 	//web前端

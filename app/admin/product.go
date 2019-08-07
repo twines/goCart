@@ -45,7 +45,17 @@ func PostChangeProductStatus(c *gin.Context) {
 
 	c.JSON(http.StatusOK, ProductChangeResult{Result: result})
 }
+func ParamaterError(c *gin.Context) {
+	ss := sessions.Default(c)
+	code := ss.Get("code")
+	msg := ss.Get("result")
+	log.Println(msg, code)
+	ss.Delete("code")
+	ss.Delete("result")
+	ss.Save()
 
+	c.HTML(http.StatusOK, "admin.error", gin.H{"code": code, "msg": "提示", "result": msg})
+}
 func UpdateProduct(c *gin.Context) {
 	//先查询  找到了更新 没有找到就返回错误
 	product := productService.GetProductById(1)
@@ -61,21 +71,15 @@ func PostProductEdit(c *gin.Context) {
 	ss.Delete("msg")
 
 	var form models.Product
-
-	code, msg := 0, ""
-
+	rev := []string{}
 	if err := c.ShouldBind(&form); err != nil {
-		m := form.GetError(err)
-		log.Println(m)
-		log.Println(err.Error())
-
-		code = 0
-		msg = err.Error()
+		//copy(rev, form.GetError(err))
+		rev = form.GetError(err)
 	} else {
 		product := models.Product{Model: models.Model{ID: form.ID}}
 
 		models.DB().First(&product)
-		rev, ok := productService.PostSaveProductEdit(form.ID, models.Product{
+		r, ok := productService.PostSaveProductEdit(form.ID, models.Product{
 			Price:       form.Price,
 			Sku:         form.Sku,
 			ProductName: form.ProductName,
@@ -83,18 +87,18 @@ func PostProductEdit(c *gin.Context) {
 
 		if ok {
 			//c.Redirect(http.StatusFound, "/admin/product/list")
-			code = 1
 		} else {
-			code = 0
+			rev = append(rev, r)
 		}
-		msg = rev
-
-		ss.Set("code", code)
-		ss.Set("msg", msg)
-		ss.Save()
 	}
-
-	c.Redirect(http.StatusFound, "/admin/product/list")
+	if len(rev) > 0 { //存在问题
+		ss.Set("code", 1)
+		ss.Set("result", rev)
+		ss.Save()
+		c.Redirect(http.StatusFound, "/admin/error")
+	} else {
+		c.Redirect(http.StatusFound, "/admin/product/list")
+	}
 
 	log.Println(form)
 }

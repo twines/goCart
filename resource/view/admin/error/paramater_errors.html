@@ -1,0 +1,75 @@
+{{define "admin.error"}}
+    <!DOCTYPE html>
+    <html lang="en" xmlns="http://www.w3.org/1999/html">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>AdminLTE 2 | Log in</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <!-- Bootstrap 3.3.7 -->
+        <link rel="stylesheet" href="/static/components/bootstrap/dist/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="/static/components/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="/static/components/Ionicons/css/ionicons.min.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
+        <!-- iCheck -->
+        <link rel="stylesheet" href="/static/plugins/iCheck/square/blue.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Google Font -->
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    </head>
+    </head>
+    <body>
+    <div class="container-fluid">
+        <div class="jumbotron">
+            <h1>{{.msg}}</h1>
+            <div class="card">
+                <div class="card-body">
+
+                    {{if gt .code 0}}
+                        {{range $index,$value:= .result}}
+                            <p>{{$value}}</p>
+                        {{end}}
+                    {{end}}
+
+
+                </div>
+
+            </div>
+
+            <p>
+                <a class="btn btn-primary btn-lg" href="#" role="button">
+                    <label class="col-md-4" id="timeinfo">(3s)后</label>立即跳转</a>
+            </p>
+        </div>
+
+    </div>
+    </div>
+    <script>
+        function redirectToLogin() {
+            var count = 3;
+            var rev = setInterval(function () {
+                count = count - 1;
+                document.getElementById("timeinfo").innerHTML = "(" + count + "s)";
+                if (count === 0) {
+                    document.location = "/admin/product/list";
+                }
+            }, 1000)
+        }
+
+        redirectToLogin();
+    </script>
+    </body>
+    </html>
+{{end}}

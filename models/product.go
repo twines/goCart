@@ -1,8 +1,7 @@
 package models
 
 import (
-	"fmt"
-	"gopkg.in/go-playground/validator.v8"
+	"goCart/pkg/util"
 )
 
 type ProductStatus uint8
@@ -23,32 +22,7 @@ type Product struct {
 	Stock       uint64        `json:"stock" form:"stock" binding:"required"`
 }
 
-func (pe *Product) GetError(err error) map[string]string {
-	vError:=err.(validator.ValidationErrors)
-	rev := map[string]string{}
-	for _, fieldError := range vError {
-		tag := fieldError.Tag
-		field := fieldError.Field
-		switch tag {
-		case "required":
-			switch field {
-			case "Stock":
-				if pe.Stock <= 0 {
-					rev[field] = "库存数据不合法"
-				}
-			case "Price":
-				if pe.Price<=0 {
-					rev[field] = "商品价格必须大于0"
-				}
+func (pe *Product) GetError(err error) []string {
 
-			case "ID":
-				if pe.ID <= 0 {
-					rev[field] = fmt.Sprintf("商品的%vID不能为0", fieldError.Value)
-				}
-
-			}
-		}
-		fmt.Println(tag, field)
-	}
-	return rev
+	return util.ValidatorErrors(err)
 }
