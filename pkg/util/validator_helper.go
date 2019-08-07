@@ -5,10 +5,12 @@
 package util
 
 import (
+	"fmt"
 	zh2 "github.com/go-playground/locales/zh"
 	ut "github.com/go-playground/universal-translator"
 	"gopkg.in/go-playground/validator.v9"
 	zh_translations "gopkg.in/go-playground/validator.v9/translations/zh"
+	"log"
 )
 
 var (
@@ -18,16 +20,50 @@ var (
 	trans    ut.Translator
 )
 
-func ValidatorErrors(err error) []string {
 
-	uni = ut.New(zh, zh)
+var codeTable = map[string]map[string]string{
+	"required": {
+		"Product.Stock":  "Stock",
+		"Product.Price":  "Price",
+		"Admin.Model.ID": "ID",
+		"xxx.Model.ID":   "ID",
+	},
+	"gt": {
+
+	},
+}
+var transTable = map[string]string{
+	"Stock": "库存量不能输入0",
+	"Price": "商品价格",
+	"ID":    "ID必须>=0",
+}
+
+func ValidatorErrors(err error) []string {
 	revs := []string{}
+	if err==nil {
+		return revs
+	}
+	uni = ut.New(zh, zh)
 	trans, _ = uni.GetTranslator("zh")
 
 	errs := err.(validator.ValidationErrors)
 	if errs != nil {
 		for _, e := range errs {
-			revs = append(revs, e.Translate(trans))
+			tag := e.Tag()
+			namespace := e.StructNamespace()
+			if space, ok := codeTable[tag]; ok {
+				if codeField, ok := space[namespace]; ok {
+					if info, ok := transTable[codeField]; ok {
+						log.Print(info)
+						revs = append(revs, info)
+					} else {
+						panic(fmt.Sprintf("请完善%v:%v=>%v对应的中文码", tag, namespace, codeField))
+					}
+				} else {
+					panic(fmt.Sprintf("请完善%v:%v=>%v对应的中文码", tag, namespace, codeField))
+				}
+			}
+			//revs = append(revs, e.Translate(trans))
 		}
 	}
 	return revs
