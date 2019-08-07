@@ -2,7 +2,9 @@ package util
 
 import (
 	"github.com/gin-gonic/gin/binding"
+	ut "github.com/go-playground/universal-translator"
 	"gopkg.in/go-playground/validator.v9"
+	zh_translations "gopkg.in/go-playground/validator.v9/translations/zh"
 	"reflect"
 	"sync"
 )
@@ -37,6 +39,11 @@ func (v *DefaultValidator) lazyinit() {
 	v.once.Do(func() {
 		v.validate = validator.New()
 		v.validate.SetTagName("binding")
+		uni := ut.New(zh, zh)
+
+		trans, _ := uni.GetTranslator("zh")
+
+		zh_translations.RegisterDefaultTranslations(v.validate, trans)
 
 		// add any custom validations etc. here
 	})

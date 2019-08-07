@@ -73,7 +73,6 @@ func PostProductEdit(c *gin.Context) {
 	var form models.Product
 	rev := []string{}
 	if err := c.ShouldBind(&form); err != nil {
-		//copy(rev, form.GetError(err))
 		rev = form.GetError(err)
 	} else {
 		product := models.Product{Model: models.Model{ID: form.ID}}
