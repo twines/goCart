@@ -102,16 +102,13 @@ func PostProductEdit(c *gin.Context) {
 	log.Println(form)
 }
 func GetProductList(c *gin.Context) {
-	productList := productService.GetProduct()
-	paginate := util.Paginate{TotalNumber: 200, Context: c, Params: map[string]interface{}{"a": 1, "b": "bbbbbb"}}
-	ss := sessions.Default(c)
-	code := 0
-	msg, ok := ss.Get("msg").(string)
-	if ok {
-		code = 1
+	p := util.Paginate{
+		Context:     c,
+		PerPage:     2,
+		TotalNumber: productService.GetProductNumber(),
 	}
-	ss.Delete("code")
-	ss.Delete("msg")
-	ss.Save()
-	c.HTML(http.StatusOK, "admin.product.list", gin.H{"code": code, "msg": msg, "productList": productList, "title": "商品列表", "paginate": paginate.Paginate()})
+	paginate := p.Paginate()
+	limit := p.PerPage
+	productList := productService.GetProduct(p.CurrentPage, limit)
+	c.HTML(http.StatusOK, "admin.product.list", gin.H{"productList": productList, "title": "商品列表", "paginate": paginate})
 }

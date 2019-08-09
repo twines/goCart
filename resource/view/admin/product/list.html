@@ -17,232 +17,226 @@
 
         <!-- Main content -->
         <section class="content">
-
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="box">
-                        <div class="box-body">
-                            <table class="table table-bordered table-hover">
-                                <thead>
-                                <tr>
-                                    <th>id</th>
-                                    <th>名称</th>
-                                    <th class="col-md-1 col-sm-1">价格（￥）</th>
-                                    <th>Sku</th>
-                                    <th>库存(个)</th>
-                                    <th>状态</th>
-                                    <th class="col-md-2">管理</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {{range $k,$product:=.productList}}
+            {{if  .productList }}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-body">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
                                     <tr>
-                                        <td>{{$product.ID}}</td>
-                                        <td>
-                                            {{$product.ProductName}}
-                                        </td>
-                                        <td>{{$product.Price}}</td>
-                                        <td>{{$product.Sku}}</td>
-                                        <td>{{$product.Stock}}</td>
-                                        {{if eq $product.Status 1}}
-                                            <td>已下架</td>
-                                        {{else}}
-                                            <td>已上架</td>
-                                        {{end}}
-
-                                        <td>
-                                            {{if eq $product.Status 0}}
-                                                <button class="btn btn-danger"
-                                                        data-toggle="modal"
-                                                        data-target="#product-off-on-{{$product.ID}}">
-                                                    下架
-                                                </button>
-                                                <button class="btn btn-info" data-toggle="modal"
-                                                        data-target="#product-edit-{{$product.ID}}">编辑
-                                                </button>
-                                                <button class="btn btn-primary">查看</button>
+                                        <th>id</th>
+                                        <th>名称</th>
+                                        <th class="col-md-1 col-sm-1">价格（￥）</th>
+                                        <th>Sku</th>
+                                        <th>库存(个)</th>
+                                        <th>状态</th>
+                                        <th class="col-md-2">管理</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {{range $k,$product:=.productList}}
+                                        <tr>
+                                            <td>{{$product.ID}}</td>
+                                            <td>
+                                                {{$product.ProductName}}
+                                            </td>
+                                            <td>{{$product.Price}}</td>
+                                            <td>{{$product.Sku}}</td>
+                                            <td>{{$product.Stock}}</td>
+                                            {{if eq $product.Status 1}}
+                                                <td>已下架</td>
                                             {{else}}
-                                                <button class="btn btn-danger"
-                                                        data-toggle="modal"
-                                                        data-target="#product-off-on-{{$product.ID}}">
-                                                    上架
-                                                </button>
+                                                <td>已上架</td>
                                             {{end}}
 
-                                        </td>
-                                    </tr>
-                                    <div class="modal fade" id="product-off-on-{{$product.ID}}" tabindex="-1"
-                                         role="dialog"
-                                         aria-label="product-off">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close"><span aria-hidden="true">&times;</span>
+                                            <td>
+                                                {{if eq $product.Status 0}}
+                                                    <button class="btn btn-danger"
+                                                            data-toggle="modal"
+                                                            data-target="#product-off-on-{{$product.ID}}">
+                                                        下架
                                                     </button>
-                                                    {{if eq $product.Status 0}}
-                                                        <h4 class="modal-title" id="product-title">
-                                                            您确定要下架<small>{{$product.ProductName}}</small></h4>
-                                                    {{else}}
-                                                        <h4 class="modal-title" id="product-title">
-                                                            您确定要上架<small>{{$product.ProductName}}</small></h4>
-                                                    {{end}}
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-default"
-                                                            data-dismiss="modal">
-                                                        关闭
+                                                    <button class="btn btn-info" data-toggle="modal"
+                                                            data-target="#product-edit-{{$product.ID}}">编辑
                                                     </button>
-                                                    <button type="submit" class="btn btn-primary"
-                                                            {{if eq $product.Status 0}}
+                                                    <button class="btn btn-primary">查看</button>
+                                                {{else}}
+                                                    <button class="btn btn-danger"
+                                                            data-toggle="modal"
+                                                            data-target="#product-off-on-{{$product.ID}}">
+                                                        上架
+                                                    </button>
+                                                {{end}}
 
-                                                            onclick="offFromShelve({{$product.ID}},{{$product.CategoryId}},1)">
+                                            </td>
+                                        </tr>
+                                        <div class="modal fade" id="product-off-on-{{$product.ID}}" tabindex="-1"
+                                             role="dialog"
+                                             aria-label="product-off">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close"><span
+                                                                    aria-hidden="true">&times;</span>
+                                                        </button>
+                                                        {{if eq $product.Status 0}}
+                                                            <h4 class="modal-title" id="product-title">
+                                                                您确定要下架
+                                                                <small>{{$product.ProductName}}</small>
+                                                            </h4>
                                                         {{else}}
-                                                            onclick="offFromShelve({{$product.ID}},{{$product.CategoryId}},0)">
-
+                                                            <h4 class="modal-title" id="product-title">
+                                                                您确定要上架
+                                                                <small>{{$product.ProductName}}</small>
+                                                            </h4>
                                                         {{end}}
-                                                        确定
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <!-- 商品编辑 -->
-                                    <div class="modal fade" id="product-edit-{{$product.ID}}" tabindex="-1"
-                                         role="dialog" aria-labelledby="product-title">
-                                        <div class="modal-dialog" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close"><span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                    <h4 class="modal-title" id="product-title">
-                                                        修改<span>{{$product.ProductName}}</span></h4>
-                                                </div>
-                                                <form action="/admin/product/edit" method="post">
-                                                    <div class="modal-body">
-                                                        <div class="input-group">
-                                                            <input id="{{$product.ID}}-id" type="text"
-                                                                   class="form-control"
-                                                                   name="ID"
-                                                                   value="{{$product.ID}}"
-                                                                   placeholder="{{$product.ID}}"
-                                                                   style="display: none"
-                                                                   aria-describedby="basic-aldon1">
-                                                            <span class="input-group-addon" id="basic-addon1">编号</span>
-                                                            <input id="{{$product.ID}}-id" type="text"
-                                                                   class="form-control"
-                                                                   value="{{$product.ID}}"
-                                                                   placeholder="{{$product.ID}}" disabled
-                                                                   aria-describedby="basic-aldon1">
-                                                        </div>
-
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon" id="basic-addon2">名称</span>
-                                                            <input id="{{$product.ID}}-name" type="text"
-                                                                   class="form-control"
-                                                                   name="name"
-                                                                   value="{{$product.ProductName}}"
-                                                                   placeholder="{{$product.ProductName}}"
-                                                                   aria-describedby="basic-addon2">
-                                                        </div>
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon"
-                                                                  id="basic-addon3">价格（￥）</span>
-                                                            <input id="{{$product.ID}}-price"
-                                                                   value="{{$product.Price}}"
-                                                                   name="price"
-                                                                   oninput="ProductEditCheckNum(this)" type="text"
-                                                                   class="form-control" placeholder="{{$product.Price}}"
-                                                                   aria-describedby="basic=addon3">
-                                                        </div>
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon" id="basic-addon3">Sku</span>
-                                                            <input id="{{$product.ID}}-sku" type="text"
-                                                                   class="form-control"
-                                                                   value="{{$product.Sku}}"
-                                                                   name="sku"
-                                                                   placeholder="{{$product.Sku}}"
-                                                                   aria-describedby="basic=addon3">
-                                                        </div>
-                                                        <div class="input-group">
-                                                        <span id="{{$product.ID}}-stock" class="input-group-addon"
-                                                              id="basic-addon3">库存(个)</span>
-                                                            <input type="text" class="form-control"
-                                                                   placeholder="{{$product.Stock}}"
-                                                                   value="{{$product.Stock}}"
-                                                                   name="stock"
-                                                                   oninput="ProductEditCheckNum(this)"
-                                                                   aria-describedby="basic=addon3">
-                                                        </div>
-
                                                     </div>
-
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-default"
                                                                 data-dismiss="modal">
                                                             关闭
                                                         </button>
                                                         <button type="submit" class="btn btn-primary"
-                                                                onclick="ProductEditSave(this,{{$product.ID}})">保存
+                                                                {{if eq $product.Status 0}}
+
+                                                                onclick="offFromShelve({{$product.ID}},{{$product.CategoryId}},1)">
+                                                            {{else}}
+                                                                onclick="offFromShelve({{$product.ID}},{{$product.CategoryId}},0)">
+
+                                                            {{end}}
+                                                            确定
                                                         </button>
                                                     </div>
-                                                </form>
+                                                </div>
+
                                             </div>
-
                                         </div>
-                                    </div>
+                                        <!-- 商品编辑 -->
+                                        <div class="modal fade" id="product-edit-{{$product.ID}}" tabindex="-1"
+                                             role="dialog" aria-labelledby="product-title">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close"><span
+                                                                    aria-hidden="true">&times;</span>
+                                                        </button>
+                                                        <h4 class="modal-title" id="product-title">
+                                                            修改<span>{{$product.ProductName}}</span></h4>
+                                                    </div>
+                                                    <form action="/admin/product/edit" method="post">
+                                                        <div class="modal-body">
+                                                            <div class="input-group">
+                                                                <input id="{{$product.ID}}-id" type="text"
+                                                                       class="form-control"
+                                                                       name="ID"
+                                                                       value="{{$product.ID}}"
+                                                                       placeholder="{{$product.ID}}"
+                                                                       style="display: none"
+                                                                       aria-describedby="basic-aldon1">
+                                                                <span class="input-group-addon"
+                                                                      id="basic-addon1">编号</span>
+                                                                <input id="{{$product.ID}}-id" type="text"
+                                                                       class="form-control"
+                                                                       value="{{$product.ID}}"
+                                                                       placeholder="{{$product.ID}}" disabled
+                                                                       aria-describedby="basic-aldon1">
+                                                            </div>
 
-                                {{else}}
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>
-                                            <button class="btn btn-pinterest">添加</button>
-                                        </td>
-                                    </tr>
-                                {{end}}
-                                </tbody>
-                            </table>
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon"
+                                                                      id="basic-addon2">名称</span>
+                                                                <input id="{{$product.ID}}-name" type="text"
+                                                                       class="form-control"
+                                                                       name="name"
+                                                                       value="{{$product.ProductName}}"
+                                                                       placeholder="{{$product.ProductName}}"
+                                                                       aria-describedby="basic-addon2">
+                                                            </div>
+                                                            <div class="input-group">
+                                                            <span class="input-group-addon"
+                                                                  id="basic-addon3">价格（￥）</span>
+                                                                <input id="{{$product.ID}}-price"
+                                                                       value="{{$product.Price}}"
+                                                                       name="price"
+                                                                       oninput="ProductEditCheckNum(this)" type="text"
+                                                                       class="form-control"
+                                                                       placeholder="{{$product.Price}}"
+                                                                       aria-describedby="basic=addon3">
+                                                            </div>
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon"
+                                                                      id="basic-addon3">Sku</span>
+                                                                <input id="{{$product.ID}}-sku" type="text"
+                                                                       class="form-control"
+                                                                       value="{{$product.Sku}}"
+                                                                       name="sku"
+                                                                       placeholder="{{$product.Sku}}"
+                                                                       aria-describedby="basic=addon3">
+                                                            </div>
+                                                            <div class="input-group">
+                                                        <span id="{{$product.ID}}-stock" class="input-group-addon"
+                                                              id="basic-addon3">库存(个)</span>
+                                                                <input type="text" class="form-control"
+                                                                       placeholder="{{$product.Stock}}"
+                                                                       value="{{$product.Stock}}"
+                                                                       name="stock"
+                                                                       oninput="ProductEditCheckNum(this)"
+                                                                       aria-describedby="basic=addon3">
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default"
+                                                                    data-dismiss="modal">
+                                                                关闭
+                                                            </button>
+                                                            <button type="submit" class="btn btn-primary"
+                                                                    onclick="ProductEditSave(this,{{$product.ID}})">保存
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    {{else}}
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <button class="btn btn-pinterest">添加</button>
+                                            </td>
+                                        </tr>
+                                    {{end}}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.box-body -->
                         </div>
-                        <!-- /.box-body -->
+                        <!-- /.box -->
                     </div>
-                    <!-- /.box -->
+                    <!-- /.col -->
                 </div>
-                <!-- /.col -->
-            </div>
-            <!-- /.row -->
-            <div class="row text-center">
-                {{.paginate}}
-            </div>
+                <!-- /.row -->
+                <div class="row text-center">
+                    {{.paginate}}
+                </div>
+            {{else}}
+                还没有商品
+            {{end}}
+
         </section>
         <!-- /.content -->
-        <div class="container-fluid">
-            <div class="row justify-content-center">
-                <div class="col-lg-5  align-self-center">
-
-                    {{if gt .code 0}}
-                        <div class="alert alert-success" role="alert">
-                            <h4 class="alert-heading">Success</h4>
-                            <h5 class="alert-heading">{{.msg}}</h5>
-
-                        </div>
-                        <script>
-                            setTimeout(function () {
-                                $(".alert").alert('close');
-                            }, 1000);
-                        </script>
-                    {{end}}
-                </div>
-            </div>
-        </div>
     </div>
-
     <script>
         console.log({{.productList}});
 

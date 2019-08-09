@@ -2,6 +2,7 @@ package serviceAdmin
 
 import (
 	"goCart/models"
+	"goCart/pkg/setting"
 )
 
 type ProductService struct {
@@ -39,14 +40,13 @@ func (ps *ProductService) PostChangeProductStatusBy(result *models.Product) bool
 	affected := models.DB().Model(&result).UpdateColumn("status", result.Status).RowsAffected > 0
 	return affected
 }
-func (ps *ProductService) GetProduct() []*models.Product {
-	var productList []*models.Product
-	models.DB().Find(&productList)
+func (ps *ProductService) GetProduct(page int, limit int) []models.Product {
+	var productList []models.Product
+	models.DB().Offset((page - 1) * limit).Limit(limit).Order("id desc").Find(&productList)
 	return productList
 }
 func (ps *ProductService) GetProductNumber() int {
-	var product models.Product
 	var number int
-	models.DB().Find(&product).Count(&number)
+	models.DB().Table(setting.DatabaseSetting.TablePrefix + "products").Count(&number)
 	return number
 }
