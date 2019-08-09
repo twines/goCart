@@ -57,7 +57,9 @@ func Setup() {
 	gorm.DefaultTableNameHandler = func(db *gorm.DB, defaultTableName string) string {
 		return setting.DatabaseSetting.TablePrefix + defaultTableName
 	}
-
+	if setting.ServerSetting.RunMode == "debug" {
+		db.LogMode(true)
+	}
 	//migrate()// 不让他自动创建表，因为float不可以为无符号型的数据
 	//db.SingularTable(true) // 如果设置为true,`User`的默认表名为`user`,使用`TableName`设置的表名不受影响
 	db.Callback().Create().Replace("gorm:update_time_stamp", updateTimeStampForCreateCallback)
