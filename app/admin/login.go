@@ -1,74 +1,56 @@
 package admin
 
 import (
-	"fmt"
-	"github.com/gin-gonic/contrib/sessions"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"goCart/language/admin"
 	"goCart/models"
 	"goCart/pkg/auth"
-	"log"
+	"goCart/pkg/util"
+	"goCart/service/admin"
 	"net/http"
 )
 
-func LoginError(c *gin.Context) {
-	//密码或者用户名错误
-	ss := sessions.Default(c)
-	msg := ss.Get("msg")
-	log.Printf("跳转信息", msg)
-	if msg == nil {
-		msg = "用户账户密码或者用户名错误"
-	}
-	ss.Delete("msg")
+var (
+	sa = &serviceAdmin.ServiceAdmin{}
+)
 
-	c.HTML(http.StatusOK, "admin.loginError", map[string]string{
-		"info": fmt.Sprintf("%v", msg),
-	})
-
-}
 func Login(c *gin.Context) {
+	session := sessions.Default(c)
+	defer session.Save()
 
-	c.HTML(http.StatusOK, "admin.login", 1)
+	err := session.Get("errs")
+	admin := session.Get("admin")
+
+	session.Delete("errs")
+	session.Delete("admin")
+
+	c.HTML(http.StatusOK, "admin.login", gin.H{"errs": err, "admin": admin})
 }
-func userInputError(c *gin.Context) bool {
 
-	code := c.Query("code")
-
-	if code == "451" {
-		info := c.Query("info")
-
-		c.HTML(http.StatusOK, "admin.login", map[string]interface{}{
-			"info": info,
-			"code": code,
-		})
-		return true
-	}
-	return false
-}
-func adminValid(c *gin.Context) (models.Admin, error) {
-	var admin models.Admin
-	err := c.ShouldBind(&admin)
-	return admin, err
-}
 func DoLogin(c *gin.Context) {
-	admin, err := adminValid(c)
-	if err != nil {
+	session := sessions.Default(c)
+	defer session.Save()
+	var admin = models.Admin{}
+	_ = c.ShouldBind(&admin)
+	if err, ok := util.Validator(admin, languageAdmin.Admin); !ok {
+		session.Set("errs", err)
+		session.Set("admin", admin)
 		c.Redirect(http.StatusFound, "/admin/login")
-		return
 	}
-	msg, ok := "", false
-	if msg, ok = models.CheckAvailable(&admin); ok {
-		fmt.Println(admin.ID)
+
+	sa.GetAdminByName(&admin)
+	if admin.ID <= 0 {
+		session.Set("errs", map[string]string{"UserName": "用户不存在"})
+		session.Set("admin", admin)
+		c.Redirect(http.StatusFound, "/admin/login")
+	} else {
+		session.Delete("errs")
+		session.Delete("admin")
 		auth.Login(c, admin)
 		c.Redirect(http.StatusFound, "/admin/product/list")
 	}
-	if ok == false {
-		ss := sessions.Default(c)
-		ss.Set("msg", msg)
-		_ = ss.Save()
-		log.Println(msg)
-		c.Redirect(http.StatusFound, "/admin/lognierror")
-	}
 }
-func Index(c *gin.Context) {
 
+func Index(c *gin.Context) {
 }

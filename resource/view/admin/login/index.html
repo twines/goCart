@@ -39,14 +39,32 @@
             <p class="login-box-msg">后台登录</p>
 
             <form action="/admin/login" method="post">
-                <div class="form-group has-feedback">
-                    <input type="text" name="name" required class="form-control" placeholder="用户名">
-                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
-                </div>
-                <div class="form-group has-feedback">
-                    <input type="password" name="password" class="form-control" required placeholder="密码">
-                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-                </div>
+                {{if  .errs}}
+                    <div class="form-group has-feedback has-error">
+                        <input type="text" name="name" value="{{.admin.UserName}}" class="form-control"
+                               placeholder="用户名">
+                        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                        <span class="help-block">{{.errs.UserName}}</span>
+                    </div>
+
+                    <div class="form-group has-feedback has-error">
+                        <input type="password" name="password" class="form-control"
+                               placeholder="密码">
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                        <span class="help-block">{{.errs.Password}}</span>
+                    </div>
+                {{else}}
+                    <div class="form-group has-feedback">
+                        <input type="text" name="name" class="form-control" placeholder="用户名">
+                        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <input type="password" name="password" class="form-control" placeholder="密码">
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                    </div>
+                {{end}}
+
                 <div class="row">
                     <div class="col-xs-8">
                         <div class="checkbox icheck">
@@ -84,32 +102,6 @@
                 increaseArea: '20%' /* optional */
             });
         });
-
-        function userUnValid() {
-            var infoView = `<div  class="alert alert-warning">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-    <strong>警告!</strong> {{.info}}
-  </div>`;
-            var loginBox = document.getElementsByClassName("login-box-body")[0];
-            console.log(loginBox);
-            loginBox.innerHTML += infoView;
-
-            function out() {
-                $(".alert").alert('close');
-                return;
-                var iview = document.getElementsByClassName("alert alert-warning")[0];
-                console.log(iview);
-                loginBox.removeChild(iview);
-            }
-
-            setTimeout(out, 2000);
-
-        }
-
-        var code = {{.code}};
-        if (code === 451) {
-            userUnValid();
-        }
     </script>
     </body>
     </html>

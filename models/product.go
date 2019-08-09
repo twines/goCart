@@ -1,9 +1,5 @@
 package models
 
-import (
-	"goCart/pkg/util"
-)
-
 type ProductStatus uint8
 
 const (
@@ -23,6 +19,5 @@ type Product struct {
 }
 
 func (pe *Product) GetError(err error) []string {
-
-	return util.ValidatorErrors(err)
+	return []string{}
 }

@@ -5,10 +5,8 @@ import (
 	"encoding/gob"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
 	"goCart/models"
 	"goCart/pkg/setting"
-	"goCart/pkg/util"
 	"goCart/routers"
 	"log"
 	"net/http"
@@ -22,11 +20,8 @@ func init() {
 	models.Setup()
 }
 func main() {
-
-	//使用v9代替v8
-	binding.Validator = new(util.DefaultValidator)
-
 	gob.Register(map[interface{}]interface{}{})
+	gob.Register(map[string]string{})
 	gob.Register(models.Admin{})
 	gob.Register(models.User{})
 	gin.SetMode(setting.ServerSetting.RunMode)
