@@ -27,8 +27,9 @@ func (ps *ProductService) GetProductById(id int) models.Product {
 	var product models.Product
 	return product
 }
-func (ps *ProductService) GetProductByName(id int) models.Product {
+func (ps *ProductService) GetProductByName(productName string) models.Product {
 	var product models.Product
+	models.DB().Where("product_name=?", productName).Find(&product)
 	return product
 }
 func (ps *ProductService) UpdateProduct(id int, product models.Product) bool {
@@ -49,4 +50,7 @@ func (ps *ProductService) GetProductNumber() int {
 	var number int
 	models.DB().Table(setting.DatabaseSetting.TablePrefix + "products").Count(&number)
 	return number
+}
+func (ps *ProductService) AddProduct(product models.Product) {
+	models.DB().Create(&product)
 }

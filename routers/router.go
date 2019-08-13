@@ -41,8 +41,15 @@ func InitRouter() *gin.Engine {
 		//admin已经登录
 		{
 			adminGroup.Use(admin2.Admin())
+			//用户列表
 			adminGroup.GET("/user", admin.User)
+			//商品列表
 			adminGroup.GET("/product/list", admin.GetProductList)
+			//新增商品页面
+			adminGroup.GET("/product/add", admin.AddProductPage)
+			//新增商品
+			adminGroup.POST("/product/add", admin.DoAddProduct)
+
 			adminGroup.POST("/product/off", admin.PostChangeProductStatus)
 			adminGroup.POST("/product/edit", admin.PostProductEdit)
 			adminGroup.GET("/error", admin.ParamaterError)

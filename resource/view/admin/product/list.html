@@ -14,9 +14,14 @@
                 <li class="active">商品列表</li>
             </ol>
         </section>
-
         <!-- Main content -->
         <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                        <a class="btn btn-primary" href="/admin/product/add">添加商品</a>
+                </div>
+
+            </div>
             {{if  .productList }}
                 <div class="row">
                     <div class="col-xs-12">
@@ -96,7 +101,7 @@
                                                     <form action="/admin/product/off" method="POST">
                                                         <input name="category_id" value="{{$product.CategoryId}}"
                                                                hidden="hidden">
-                                                        <input name="pid" value="{{$product.ID}}"  hidden="hidden">
+                                                        <input name="pid" value="{{$product.ID}}" hidden="hidden">
                                                         {{if eq $product.Status 0}}
 
                                                             <input name="status" value="1" hidden="hidden">

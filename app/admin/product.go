@@ -1,9 +1,11 @@
 package admin
 
 import (
+	"fmt"
 	"github.com/Unknwon/com"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	languageAdmin "goCart/language/admin"
 	"goCart/models"
 	"goCart/pkg/util"
 	"goCart/service/admin"
@@ -52,26 +54,18 @@ func ParamaterError(c *gin.Context) {
 	log.Println(msg, code)
 	ss.Delete("code")
 	ss.Delete("result")
-	ss.Save()
+	_ = ss.Save()
 
 	c.HTML(http.StatusOK, "admin.error", gin.H{"code": code, "msg": "提示", "result": msg})
 }
-func UpdateProduct(c *gin.Context) {
-	//先查询  找到了更新 没有找到就返回错误
-	product := productService.GetProductById(1)
-	if product.ID == 0 {
-		//错误
-	}
-	productService.UpdateProduct(1, models.Product{})
 
-}
 func PostProductEdit(c *gin.Context) {
 	ss := sessions.Default(c)
 	ss.Delete("code")
 	ss.Delete("msg")
 
 	var form models.Product
-	rev := []string{}
+	var rev []string
 	if err := c.ShouldBind(&form); err != nil {
 		rev = form.GetError(err)
 	} else {
@@ -93,7 +87,7 @@ func PostProductEdit(c *gin.Context) {
 	if len(rev) > 0 { //存在问题
 		ss.Set("code", 1)
 		ss.Set("result", rev)
-		ss.Save()
+		_ = ss.Save()
 		c.Redirect(http.StatusFound, "/admin/error")
 	} else {
 		c.Redirect(http.StatusFound, "/admin/product/list")
@@ -111,4 +105,42 @@ func GetProductList(c *gin.Context) {
 	limit := p.PerPage
 	productList := productService.GetProduct(p.CurrentPage, limit)
 	c.HTML(http.StatusOK, "admin.product.list", gin.H{"productList": productList, "title": "商品列表", "paginate": paginate})
+}
+func AddProductPage(c *gin.Context) {
+	session := sessions.Default(c)
+	defer session.Save()
+
+	errors := session.Get("errors")
+	product := session.Get("product")
+	fmt.Println(errors)
+	session.Delete("errors")
+	session.Delete("product")
+
+	c.HTML(http.StatusOK, "admin.product.add", gin.H{"title": "添加商品", "errors": errors, "product": product})
+}
+
+func DoAddProduct(c *gin.Context) {
+	session := sessions.Default(c)
+	defer session.Save()
+	var product = models.Product{}
+	_ = c.ShouldBind(&product)
+	if err, ok := util.Validator(product, languageAdmin.Product); !ok {
+		session.Set("errors", err)
+		session.Set("product", product)
+		c.Redirect(http.StatusFound, "/admin/product/add")
+	} else {
+		p := productService.GetProductByName(product.ProductName)
+		fmt.Println(p.ID)
+		if p.ID > 0 {
+			session.Set("errors", map[string]string{"ProductName": "该商品已经存在"})
+			session.Set("product", product)
+			c.Redirect(http.StatusFound, "/admin/product/add")
+		} else {
+			session.Delete("errors")
+			session.Delete("product")
+			productService.AddProduct(product)
+			c.Redirect(http.StatusFound, "/admin/product/list")
+		}
+	}
+
 }
