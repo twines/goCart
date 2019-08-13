@@ -42,8 +42,8 @@ func PostChangeProductStatus(c *gin.Context) {
 			result.Result = affected
 		}
 	}
-
-	c.JSON(http.StatusOK, ProductChangeResult{Result: result})
+	c.Redirect(http.StatusFound, "/admin/product/list")
+	//c.JSON(http.StatusOK, ProductChangeResult{Result: result})
 }
 func ParamaterError(c *gin.Context) {
 	ss := sessions.Default(c)

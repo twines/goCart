@@ -93,22 +93,29 @@
                                                             </h4>
                                                         {{end}}
                                                     </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-default"
-                                                                data-dismiss="modal">
-                                                            关闭
-                                                        </button>
-                                                        <button type="submit" class="btn btn-primary"
-                                                                {{if eq $product.Status 0}}
+                                                    <form action="/admin/product/off" method="POST">
+                                                        <input name="category_id" value="{{$product.CategoryId}}"
+                                                               hidden="hidden">
+                                                        <input name="pid" value="{{$product.ID}}"  hidden="hidden">
+                                                        {{if eq $product.Status 0}}
 
-                                                                onclick="offFromShelve({{$product.ID}},{{$product.CategoryId}},1)">
-                                                            {{else}}
-                                                                onclick="offFromShelve({{$product.ID}},{{$product.CategoryId}},0)">
+                                                            <input name="status" value="1" hidden="hidden">
 
-                                                            {{end}}
-                                                            确定
-                                                        </button>
-                                                    </div>
+                                                        {{else}}
+                                                            <input name="status" value="0" hidden="hidden">
+                                                        {{end}}
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-default"
+                                                                    data-dismiss="modal">
+                                                                关闭
+                                                            </button>
+
+                                                            <button type="submit" class="btn btn-primary">
+
+                                                                确定
+                                                            </button>
+                                                        </div>
+                                                    </form>
                                                 </div>
 
                                             </div>
@@ -188,14 +195,12 @@
                                                             </div>
 
                                                         </div>
-
                                                         <div class="modal-footer">
                                                             <button type="button" class="btn btn-default"
                                                                     data-dismiss="modal">
                                                                 关闭
                                                             </button>
-                                                            <button type="submit" class="btn btn-primary"
-                                                                    onclick="ProductEditSave(this,{{$product.ID}})">保存
+                                                            <button type="submit" class="btn btn-primary">保存
                                                             </button>
                                                         </div>
                                                     </form>
@@ -238,39 +243,7 @@
         <!-- /.content -->
     </div>
     <script>
-        console.log({{.productList}});
-
-        function offFromShelve(pid, categoryId, status) {
-            var xmlhttp;
-
-            if (window.XMLHttpRequest) {
-                // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
-                xmlhttp = new XMLHttpRequest();
-            } else {
-                // IE6, IE5 浏览器执行代码
-                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-            }
-            xmlhttp.onreadystatechange = function () {
-                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    console.log("发送成功");
-                    location.reload();
-                }
-            };
-            xmlhttp.open("POST", "/admin/product/off", true);
-            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            var query = "category_id=" + categoryId + "&pid=" + pid + "&status=" + status;
-            console.log(query);
-            xmlhttp.send(query);
-        }
-
-        function ProductEditSave(e, pid) {
-            var proName = document.getElementById(pid + "-name").value;
-            var proPrice = document.getElementById(pid + "-price").value;
-            var proSku = document.getElementById(pid + "-sku").value;
-            var proStock = document.getElementById(pid + "-stock").value;
-            console.log(proName);
-            console.log(proPrice);
-        }
+        console.debug({{.productList}});
 
         function ProductEditCheckNum(e) {
             var inputValue = e.value;
