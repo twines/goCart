@@ -37,19 +37,24 @@ func DoLogin(c *gin.Context) {
 		session.Set("errs", err)
 		session.Set("admin", admin)
 		c.Redirect(http.StatusFound, "/admin/login")
+	} else {
+		sa.GetAdminByName(&admin)
+		if admin.ID <= 0 {
+			session.Set("errs", map[string]string{"UserName": "该用户不存在"})
+			session.Set("admin", admin)
+			c.Redirect(http.StatusFound, "/admin/login")
+		} else if admin.Password != util.EncodeMD5(c.PostForm("password")) {
+			session.Set("errs", map[string]string{"Password": "密码错误"})
+			session.Set("admin", admin)
+			c.Redirect(http.StatusFound, "/admin/login")
+		} else {
+			session.Delete("errs")
+			session.Delete("admin")
+			auth.Login(c, admin)
+			c.Redirect(http.StatusFound, "/admin/product/list")
+		}
 	}
 
-	sa.GetAdminByName(&admin)
-	if admin.ID <= 0 {
-		session.Set("errs", map[string]string{"UserName": "用户不存在"})
-		session.Set("admin", admin)
-		c.Redirect(http.StatusFound, "/admin/login")
-	} else {
-		session.Delete("errs")
-		session.Delete("admin")
-		auth.Login(c, admin)
-		c.Redirect(http.StatusFound, "/admin/product/list")
-	}
 }
 
 func Index(c *gin.Context) {
