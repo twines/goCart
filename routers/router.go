@@ -38,7 +38,12 @@ func InitRouter() *gin.Engine {
 			adminGroup.GET("/login", admin.Login)
 			adminGroup.POST("/login", admin.DoLogin)
 			adminGroup.GET("/", admin.Index)
+
+			//图片上传
 			adminGroup.POST("/upload", admin.Upload)
+			//多图上传
+			adminGroup.POST("/upload/multi", admin.UploadMulti)
+
 		}
 		//admin已经登录
 		{
@@ -53,10 +58,19 @@ func InitRouter() *gin.Engine {
 			adminGroup.GET("/product/add", admin.AddProductPage)
 			//新增商品
 			adminGroup.POST("/product/add", admin.DoAddProduct)
+			//编辑商品页面
+			adminGroup.GET("/product/edit/:id", admin.Edit)
+			//更新商品信息
+			adminGroup.POST("/product/save/:id", admin.Save)
 
 			adminGroup.POST("/product/off", admin.PostChangeProductStatus)
 			adminGroup.POST("/product/edit", admin.PostProductEdit)
 			adminGroup.GET("/error", admin.ParamaterError)
+
+			//图片上传
+			//adminGroup.POST("/upload", admin.Upload)
+			////多图上传
+			//adminGroup.POST("/upload/multi", admin.UploadMulti)
 		}
 	}
 	//web前端

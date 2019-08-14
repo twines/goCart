@@ -1,4 +1,4 @@
-{{define "admin.product.add"}}
+{{define "admin.product.edit"}}
     {{template "admin.app" .}}
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -10,8 +10,7 @@
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/admin"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="/admin/product/add">添加商品</a></li>
-                <li class="active">商品列表</li>
+                <li><a href="/admin/product/list">商品列表</a></li>
             </ol>
         </section>
         <!-- Main content -->
@@ -29,7 +28,7 @@
                                     </div>
                                     <!-- form start -->
                                     {{if .errors}}
-                                        <form class="form-horizontal" method="post" action="/admin/product/add">
+                                        <form class="form-horizontal" method="post" action="/admin/product/save/{{.product.ID}}">
                                             <div class="box-body">
                                                 <div class="nav-tabs-custom">
                                                     <ul class="nav nav-tabs">
@@ -227,7 +226,8 @@
                                             <!-- /.box-footer -->
                                         </form>
                                     {{else}}
-                                        <form class="form-horizontal" method="post" action="/admin/product/add">
+                                        <form class="form-horizontal" method="post"
+                                              action="/admin/product/save/{{.product.ID}}">
                                             <div class="box-body">
                                                 <div class="nav-tabs-custom">
                                                     <ul class="nav nav-tabs">
@@ -255,6 +255,7 @@
 
                                                                 <div class="col-sm-10">
                                                                     <input type="text" name="productName"
+                                                                           value="{{.product.ProductName}}"
                                                                            required
                                                                            class="form-control"
                                                                            id="productName" placeholder="商品名称">
@@ -265,11 +266,11 @@
                                                                        class="col-sm-2 control-label">描述</label>
 
                                                                 <div class="col-sm-10">
-                                                                <textarea type="text" class="form-control"
+                                                                <textarea class="form-control"
                                                                           required
                                                                           name="description"
                                                                           id="description"
-                                                                          placeholder="商品描述"></textarea>
+                                                                          placeholder="商品描述">{{.product.Description}}</textarea>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
@@ -278,6 +279,7 @@
 
                                                                 <div class="col-sm-10">
                                                                     <input type="text" class="form-control"
+                                                                           value="{{.product.Keyword}}"
                                                                            required
                                                                            name="keyword"
                                                                            id="keyword" placeholder="商品关键字">
@@ -294,6 +296,7 @@
 
                                                                 <div class="col-sm-10">
                                                                     <input type="text" class="form-control"
+                                                                           value="{{.product.Type}}"
                                                                            required
                                                                            name="type"
                                                                            id="type" placeholder="商品型号">
@@ -305,6 +308,7 @@
 
                                                                 <div class="col-sm-10">
                                                                     <input type="text" class="form-control"
+                                                                           value="{{.product.Sku}}"
                                                                            required
                                                                            name="sku"
                                                                            id="sku" placeholder="sku">
@@ -317,6 +321,7 @@
 
                                                                 <div class="col-sm-10">
                                                                     <input type="text" class="form-control"
+                                                                           value="{{.product.Stock}}"
                                                                            required
                                                                            name="stock"
                                                                            id="stock" placeholder="库存">
@@ -329,6 +334,7 @@
 
                                                                 <div class="col-sm-10">
                                                                     <input type="text" class="form-control"
+                                                                           value="{{.product.Price}}"
                                                                            required
                                                                            name="price"
                                                                            id="price" placeholder="价格">
@@ -341,6 +347,7 @@
 
                                                                 <div class="col-sm-10">
                                                                     <input type="text" class="form-control"
+                                                                           value="{{.product.Width}}"
                                                                            required
                                                                            name="width"
                                                                            id="width" placeholder="宽度">
@@ -353,6 +360,7 @@
 
                                                                 <div class="col-sm-10">
                                                                     <input type="text" class="form-control"
+                                                                           value="{{.product.Height}}"
                                                                            required
                                                                            name="height"
                                                                            id="height" placeholder="高度">
@@ -365,6 +373,7 @@
 
                                                                 <div class="col-sm-10">
                                                                     <input type="text" class="form-control"
+                                                                           value="{{.product.Weight}}"
                                                                            required
                                                                            name="weight"
                                                                            id="weight" placeholder="重量">
