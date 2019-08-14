@@ -11,6 +11,7 @@ import (
 	"goCart/service/admin"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 var (
@@ -151,5 +152,23 @@ func DoAddProduct(c *gin.Context) {
 			}
 		}
 	}
-
+}
+func Edit(c *gin.Context) {
+	if id, err := strconv.Atoi(c.Param("id")); err == nil && id > 0 {
+		product := productService.GetProductById(id)
+		c.HTML(http.StatusOK, "admin.product.edit", gin.H{"product": product})
+	} else {
+		fmt.Println(id)
+		c.Abort()
+	}
+}
+func Save(c *gin.Context) {
+	if id, err := strconv.Atoi(c.Param("id")); err == nil && id > 0 {
+		product := productService.GetProductById(id)
+		if product.ID <= 0 {
+			c.Abort()
+		}
+	} else {
+		c.Abort()
+	}
 }

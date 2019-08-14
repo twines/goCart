@@ -24,7 +24,8 @@ func (ps *ProductService) PostSaveProductEdit(id uint64, product models.Product)
 }
 
 func (ps *ProductService) GetProductById(id int) models.Product {
-	var product models.Product
+	product := models.Product{}
+	models.DB().First(&product, id)
 	return product
 }
 func (ps *ProductService) GetProductByName(productName string) models.Product {
