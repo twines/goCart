@@ -4,3 +4,4 @@
 /view/static
 /view/index/index.html
 .DS_Store
+/runtime/upload/images/*

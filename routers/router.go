@@ -11,6 +11,7 @@ import (
 	admin2 "goCart/middleware/admin"
 	"goCart/middleware/cors"
 	"goCart/middleware/jwt"
+	"goCart/pkg/setting"
 	"net/http"
 	"time"
 )
@@ -21,7 +22,7 @@ func InitRouter() *gin.Engine {
 	r.Use(gin.Recovery())
 	r.LoadHTMLGlob("resource/view/*/**/*.html")
 	r.StaticFS("/static", http.Dir("resource/static"))
-
+	r.StaticFS("/upload/images", http.Dir(setting.AppSetting.RuntimeRootPath+setting.AppSetting.ImageSavePath))
 	store, _ := redis.NewStore(10, "tcp", "localhost:6379", "", []byte("secret"))
 	store.Options(sessions.Options{
 		MaxAge: int(30 * time.Minute), //30min
@@ -37,6 +38,7 @@ func InitRouter() *gin.Engine {
 			adminGroup.GET("/login", admin.Login)
 			adminGroup.POST("/login", admin.DoLogin)
 			adminGroup.GET("/", admin.Index)
+			adminGroup.POST("/upload", admin.Upload)
 		}
 		//admin已经登录
 		{
