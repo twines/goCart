@@ -31,6 +31,9 @@ func migrate() {
 		Admin{},
 		Auth{},
 		Product{},
+		Group{},
+		Role{},
+		Right{},
 	}
 	db.AutoMigrate(models...)
 }

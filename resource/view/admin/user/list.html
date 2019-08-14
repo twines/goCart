@@ -1,0 +1,168 @@
+{{define "admin.user.list"}}
+    {{template "admin.app" .}}
+    {{template "admin.user.content" .}}
+    {{template "admin.footer"}}
+{{end}}
+
+{{define "admin.user.content"}}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                用户管理
+                <small>用户列表</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="/admin"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li><a href="/admin/user/list">用户管理</a></li>
+                <li class="active">用户列表</li>
+            </ol>
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <a class="btn btn-primary" href="#user-add-modal" data-toggle="modal" id="user-add">添加用户</a>
+                </div>
+
+            </div>
+            {{if  .users }}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-body">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>姓名</th>
+                                        <th class="col-md-1 col-sm-1">密码</th>
+                                        <th>状态</th>
+                                        <th class="col-md-2">所属组</th>
+                                        <th class="col-md-2">职务(角色)</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {{range $k,$user:=.users}}
+                                        <tr>
+                                            <td>{{$user.ID}}</td>
+                                            <td>
+                                                {{$user.UserName}}
+                                            </td>
+                                            <td>{{$user.Password}}</td>
+                                            {{if eq $user.Status 0}}
+                                                <td>正常</td>
+                                            {{else}}
+                                                <td>已上架</td>
+                                            {{end}}
+
+                                            <td>
+
+                                                {{if $user.Groups}}
+
+                                                    {{range $gindex, $group:= $user.Groups}}
+                                                        <span class="badge badge-light">{{$group.Title}}</span>
+                                                    {{end}}
+
+                                                {{end}}
+                                            </td> <td>
+
+                                                {{if $user.Roles}}
+
+                                                    {{range $gindex, $role:= $user.Roles}}
+                                                        <span class="badge badge-light">{{$role.Title}}</span>
+                                                    {{end}}
+
+                                                {{end}}
+                                            </td>
+                                        </tr>
+
+                                    {{else}}
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <button class="btn btn-pinterest">添加</button>
+                                            </td>
+                                        </tr>
+                                    {{end}}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+                <div class="row text-center">
+                    {{.paginate}}
+                </div>
+            {{else}}
+                还没用户
+            {{end}}
+
+        </section>
+        <!-- /.content -->
+    </div>
+
+
+    <div class="modal fade" id="user-add-modal" tabindex="-1"
+         role="dialog" aria-labelledby="user-add">
+
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span>添加用户</span>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label for="validationDefault01">用户名</label>
+                                <input type="text" class="form-control" id="validationDefault01" placeholder="用户名"
+                                       required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="validationDefault02">默认密码</label>
+                                <input type="text" class="form-control" id="validationDefault02" placeholder="密码"
+                                       value="123456" required>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary" type="submit">Submit form</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script>
+        console.debug({{.productList}});
+
+        function ProductEditCheckNum(e) {
+            var inputValue = e.value;
+            var placeHolder = e.placeholder;
+            console.log(inputValue);
+            var regular = /^[0-9]+(.[0-9]{0,2})?$/;
+            if (regular.test(inputValue.toString())) {
+                console.log("输入合法");
+
+            } else {
+                console.log("输入格式不正确");
+                e.value = "输入数据格式不正确";
+                setTimeout(function () {
+                    e.value = placeHolder;
+                }, 1000);
+            }
+
+        }
+
+    </script>
+{{end}}
