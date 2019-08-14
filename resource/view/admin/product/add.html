@@ -121,6 +121,20 @@
                                                                 </div>
                                                             </div>
 
+                                                            <div class="form-group {{if .errors.Stock}}has-error{{end}}">
+                                                                <label for="sku"
+                                                                       class="col-sm-2 control-label">库存</label>
+
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control"
+                                                                           value="{{.product.Stock}}"
+                                                                           required
+                                                                           name="sku"
+                                                                           id="sku" placeholder="库存">
+                                                                    <span class="help-block">{{.errors.Stock}}</span>
+                                                                </div>
+                                                            </div>
+
                                                             <div class="form-group {{if .errors.Price}}has-error{{end}}">
                                                                 <label for="price"
                                                                        class="col-sm-2 control-label">价格</label>
@@ -294,6 +308,18 @@
                                                                            required
                                                                            name="sku"
                                                                            id="sku" placeholder="sku">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="stock"
+                                                                       class="col-sm-2 control-label">库存</label>
+
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control"
+                                                                           required
+                                                                           name="stock"
+                                                                           id="stock" placeholder="库存">
                                                                 </div>
                                                             </div>
 
