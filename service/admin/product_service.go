@@ -51,6 +51,11 @@ func (ps *ProductService) GetProductNumber() int {
 	models.DB().Table(setting.DatabaseSetting.TablePrefix + "products").Count(&number)
 	return number
 }
-func (ps *ProductService) AddProduct(product models.Product) {
-	models.DB().Create(&product)
+func (ps *ProductService) GetProductBySku(sku string) models.Product {
+	var product = models.Product{}
+	models.DB().Where("sku=?", sku).First(&product)
+	return product
+}
+func (ps *ProductService) AddProduct(product models.Product) int64 {
+	return models.DB().Create(&product).RowsAffected
 }

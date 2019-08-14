@@ -98,7 +98,6 @@ func PostProductEdit(c *gin.Context) {
 func GetProductList(c *gin.Context) {
 	p := util.Paginate{
 		Context:     c,
-		PerPage:     2,
 		TotalNumber: productService.GetProductNumber(),
 	}
 	paginate := p.Paginate()
@@ -130,16 +129,26 @@ func DoAddProduct(c *gin.Context) {
 		c.Redirect(http.StatusFound, "/admin/product/add")
 	} else {
 		p := productService.GetProductByName(product.ProductName)
-		fmt.Println(p.ID)
 		if p.ID > 0 {
 			session.Set("errors", map[string]string{"ProductName": "该商品已经存在"})
 			session.Set("product", product)
 			c.Redirect(http.StatusFound, "/admin/product/add")
 		} else {
-			session.Delete("errors")
-			session.Delete("product")
-			productService.AddProduct(product)
-			c.Redirect(http.StatusFound, "/admin/product/list")
+			if p = productService.GetProductBySku(product.Sku); p.ID > 0 {
+				session.Set("errors", map[string]string{"Sku": "该商品Sku已经存在"})
+				session.Set("product", product)
+				c.Redirect(http.StatusFound, "/admin/product/add")
+			} else {
+				if id := productService.AddProduct(product); id > 0 {
+					session.Delete("errors")
+					session.Delete("product")
+					c.Redirect(http.StatusFound, "/admin/product/list")
+				} else {
+					session.Set("errors", map[string]string{"ProductName": "该商品已经存在"})
+					session.Set("product", product)
+					c.Redirect(http.StatusFound, "/admin/product/add")
+				}
+			}
 		}
 	}
 

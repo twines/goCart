@@ -91,21 +91,92 @@
                                                         </div>
                                                         <!-- /.tab-pane -->
                                                         <div class="tab-pane" id="tab_2">
-                                                            The European languages are members of the same family. Their
-                                                            separate existence is a myth.
-                                                            For science, music, sport, etc, Europe uses the same
-                                                            vocabulary.
-                                                            The languages only differ
-                                                            in their grammar, their pronunciation and their most common
-                                                            words. Everyone realizes why a
-                                                            new common language would be desirable: one could refuse to
-                                                            pay
-                                                            expensive translators. To
-                                                            achieve this, it would be necessary to have uniform grammar,
-                                                            pronunciation and more common
-                                                            words. If several languages coalesce, the grammar of the
-                                                            resulting language is more simple
-                                                            and regular than that of the individual languages.
+
+
+                                                            <div class="form-group {{if .errors.Type}}has-error{{end}}">
+                                                                <label for="type"
+                                                                       class="col-sm-2 control-label">型号</label>
+
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control"
+                                                                           value="{{.product.Type}}"
+                                                                           required
+                                                                           name="type"
+                                                                           id="type" placeholder="商品型号">
+                                                                    <span class="help-block">{{.errors.Type}}</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group {{if .errors.Sku}}has-error{{end}}">
+                                                                <label for="sku"
+                                                                       class="col-sm-2 control-label">sku</label>
+
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control"
+                                                                           value="{{.product.Sku}}"
+                                                                           required
+                                                                           name="sku"
+                                                                           id="sku" placeholder="sku">
+                                                                    <span class="help-block">{{.errors.Sku}}</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group {{if .errors.Price}}has-error{{end}}">
+                                                                <label for="price"
+                                                                       class="col-sm-2 control-label">价格</label>
+
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control"
+                                                                           value="{{.product.Price}}"
+                                                                           required
+                                                                           name="price"
+                                                                           id="price" placeholder="价格">
+                                                                    <span class="help-block">{{.errors.Price}}</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group {{if .errors.Width}}has-error{{end}}">
+                                                                <label for="width"
+                                                                       class="col-sm-2 control-label">宽度</label>
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control"
+                                                                           value="{{.product.Width}}"
+                                                                           required
+                                                                           name="width"
+                                                                           id="width" placeholder="宽度">
+                                                                    <span class="help-block">{{.errors.Width}}</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group {{if .errors.Height}}has-error{{end}}">
+                                                                <label for="height"
+                                                                       class="col-sm-2 control-label">高度</label>
+
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control"
+                                                                           value="{{.product.Height}}"
+                                                                           required
+                                                                           name="height"
+                                                                           id="height" placeholder="高度">
+                                                                    <span class="help-block">{{.errors.Height}}</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group {{if .errors.Weight}}has-error{{end}}">
+                                                                <label for="weight"
+                                                                       class="col-sm-2 control-label">重量</label>
+
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control"
+                                                                           value="{{.product.Weight}}"
+                                                                           required
+                                                                           name="weight"
+                                                                           id="weight" placeholder="重量">
+                                                                    <span class="help-block">{{.errors.Weight}}</span>
+                                                                </div>
+                                                            </div>
+
+
                                                         </div>
                                                         <!-- /.tab-pane -->
                                                         <div class="tab-pane" id="tab_3">
@@ -153,7 +224,7 @@
                                                         </li>
                                                         <li>
                                                             <a href="#tab_2" data-toggle="tab">
-                                                                基本信息
+                                                                参数
                                                             </a>
                                                         </li>
                                                         <li>
@@ -170,6 +241,7 @@
 
                                                                 <div class="col-sm-10">
                                                                     <input type="text" name="productName"
+                                                                           required
                                                                            class="form-control"
                                                                            id="productName" placeholder="商品名称">
                                                                 </div>
@@ -180,6 +252,7 @@
 
                                                                 <div class="col-sm-10">
                                                                 <textarea type="text" class="form-control"
+                                                                          required
                                                                           name="description"
                                                                           id="description"
                                                                           placeholder="商品描述"></textarea>
@@ -191,6 +264,7 @@
 
                                                                 <div class="col-sm-10">
                                                                     <input type="text" class="form-control"
+                                                                           required
                                                                            name="keyword"
                                                                            id="keyword" placeholder="商品关键字">
                                                                 </div>
@@ -198,21 +272,79 @@
                                                         </div>
                                                         <!-- /.tab-pane -->
                                                         <div class="tab-pane" id="tab_2">
-                                                            The European languages are members of the same family. Their
-                                                            separate existence is a myth.
-                                                            For science, music, sport, etc, Europe uses the same
-                                                            vocabulary.
-                                                            The languages only differ
-                                                            in their grammar, their pronunciation and their most common
-                                                            words. Everyone realizes why a
-                                                            new common language would be desirable: one could refuse to
-                                                            pay
-                                                            expensive translators. To
-                                                            achieve this, it would be necessary to have uniform grammar,
-                                                            pronunciation and more common
-                                                            words. If several languages coalesce, the grammar of the
-                                                            resulting language is more simple
-                                                            and regular than that of the individual languages.
+
+
+                                                            <div class="form-group">
+                                                                <label for="type"
+                                                                       class="col-sm-2 control-label">型号</label>
+
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control"
+                                                                           required
+                                                                           name="type"
+                                                                           id="type" placeholder="商品型号">
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="sku"
+                                                                       class="col-sm-2 control-label">sku</label>
+
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control"
+                                                                           required
+                                                                           name="sku"
+                                                                           id="sku" placeholder="sku">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="price"
+                                                                       class="col-sm-2 control-label">价格</label>
+
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control"
+                                                                           required
+                                                                           name="price"
+                                                                           id="price" placeholder="价格">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="width"
+                                                                       class="col-sm-2 control-label">宽度</label>
+
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control"
+                                                                           required
+                                                                           name="width"
+                                                                           id="width" placeholder="宽度">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="height"
+                                                                       class="col-sm-2 control-label">高度</label>
+
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control"
+                                                                           required
+                                                                           name="height"
+                                                                           id="height" placeholder="高度">
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label for="weight"
+                                                                       class="col-sm-2 control-label">重量</label>
+
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control"
+                                                                           required
+                                                                           name="weight"
+                                                                           id="weight" placeholder="重量">
+                                                                </div>
+                                                            </div>
+
                                                         </div>
                                                         <!-- /.tab-pane -->
                                                         <div class="tab-pane" id="tab_3">
