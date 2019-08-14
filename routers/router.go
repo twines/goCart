@@ -59,7 +59,7 @@ func InitRouter() *gin.Engine {
 			//编辑商品页面
 			adminGroup.GET("/product/edit/:id", admin.Edit)
 			//更新商品信息
-			adminGroup.POST("/product/Save/:id", admin.Save)
+			adminGroup.POST("/product/save/:id", admin.Save)
 
 			adminGroup.POST("/product/off", admin.PostChangeProductStatus)
 			adminGroup.POST("/product/edit", admin.PostProductEdit)

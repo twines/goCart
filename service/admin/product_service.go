@@ -33,9 +33,8 @@ func (ps *ProductService) GetProductByName(productName string) models.Product {
 	models.DB().Where("product_name=?", productName).Find(&product)
 	return product
 }
-func (ps *ProductService) UpdateProduct(id int, product models.Product) bool {
-	//return true
-	return false
+func (ps *ProductService) UpdateProduct(product models.Product) int64 {
+	return models.DB().Save(&product).RowsAffected
 }
 
 func (ps *ProductService) PostChangeProductStatusBy(result *models.Product) bool {

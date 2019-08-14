@@ -155,19 +155,54 @@ func DoAddProduct(c *gin.Context) {
 }
 func Edit(c *gin.Context) {
 	if id, err := strconv.Atoi(c.Param("id")); err == nil && id > 0 {
-		product := productService.GetProductById(id)
-		c.HTML(http.StatusOK, "admin.product.edit", gin.H{"product": product})
+		session := sessions.Default(c)
+		defer session.Save()
+		if product := session.Get("product"); product != nil {
+
+			session.Delete("errors")
+			session.Delete("product")
+
+			c.HTML(http.StatusOK, "admin.product.edit", gin.H{"product": product, "title": product.(models.Product).ProductName})
+		} else {
+			if product := productService.GetProductById(id); product.ID > 0 {
+				c.HTML(http.StatusOK, "admin.product.edit", gin.H{"product": product, "title": product.ProductName})
+			} else {
+				c.Abort()
+			}
+		}
+
 	} else {
 		fmt.Println(id)
 		c.Abort()
 	}
 }
 func Save(c *gin.Context) {
+	product := models.Product{}
+	session := sessions.Default(c)
+	defer session.Save()
+
+	_ = c.ShouldBind(&product)
+
 	if id, err := strconv.Atoi(c.Param("id")); err == nil && id > 0 {
-		product := productService.GetProductById(id)
-		if product.ID <= 0 {
-			c.Abort()
+
+		if err, ok := util.Validator(product, languageAdmin.Product); !ok {
+			session.Set("errors", err)
+			session.Set("product", product)
+			c.Redirect(http.StatusFound, fmt.Sprintf("/admin/product/edit/%d", id))
+		} else {
+			p := productService.GetProductById(id)
+			if p.ID <= 0 {
+				c.Abort()
+			} else {
+				product.ID = uint64(id)
+				if row := productService.UpdateProduct(product); row > 0 {
+					c.Redirect(http.StatusFound, "/admin/product/list")
+				} else {
+					c.Abort()
+				}
+			}
 		}
+
 	} else {
 		c.Abort()
 	}
