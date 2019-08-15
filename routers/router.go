@@ -69,6 +69,9 @@ func InitRouter() *gin.Engine {
 			//adminGroup.POST("/upload", admin.Upload)
 			////多图上传
 			//adminGroup.POST("/upload/multi", admin.UploadMulti)
+
+			//订单列表
+			adminGroup.GET("/order/list", admin.OrderList)
 		}
 	}
 	//web前端

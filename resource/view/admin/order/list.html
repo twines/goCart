@@ -1,0 +1,98 @@
+{{define "admin.order.list"}}
+    {{template "admin.app" .}}
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                商品管理
+                <small>商品列表</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="/admin"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li><a href="/admin/product/list">商品管理</a></li>
+                <li class="active">商品列表</li>
+            </ol>
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <a class="btn btn-primary" href="/admin/product/add">添加商品</a>
+                </div>
+
+            </div>
+            {{if  .orderSlice }}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-body">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>收件人姓名</th>
+                                        <th>收件人电话</th>
+                                        <th>收件人地址</th>
+                                        <th>订单编号</th>
+                                        <th>状态</th>
+                                        <th class="col-md-2">管理</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {{range $k,$order:=.orderSlice}}
+                                        <tr>
+                                            <td>{{$order.ID}}</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td>{{$order.OrderNumber}}</td>
+                                            <td>{{$order.Status}}</td>
+                                        </tr>
+                                    {{else}}
+
+                                    {{end}}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+                <div class="row text-center">
+                    {{.paginate}}
+                </div>
+            {{else}}
+                还没有订单
+            {{end}}
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <script>
+        console.debug({{.productList}});
+
+        function ProductEditCheckNum(e) {
+            var inputValue = e.value;
+            var placeHolder = e.placeholder;
+            console.log(inputValue);
+            var regular = /^[0-9]+(.[0-9]{0,2})?$/;
+            if (regular.test(inputValue.toString())) {
+                console.log("输入合法");
+
+            } else {
+                console.log("输入格式不正确");
+                e.value = "输入数据格式不正确";
+                setTimeout(function () {
+                    e.value = placeHolder;
+                }, 1000);
+            }
+
+        }
+
+    </script>
+    {{template "admin.footer"}}
+{{end}}

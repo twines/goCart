@@ -26,6 +26,9 @@ func migrate() {
 		Group{},
 		Role{},
 		Right{},
+		Order{},
+		OrderProduct{},
+		Address{},
 	}
 	db.AutoMigrate(models...)
 }
