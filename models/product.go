@@ -20,11 +20,11 @@ type Product struct {
 	Price       float32       `json:"price" form:"price" binding:"required"`
 	Status      ProductStatus `json:"status" gorm:"status"`
 	Stock       uint64        `json:"stock" form:"stock" binding:"required"`
-
-	Type   string  `json:"type" gorm:"index" form:"type"`
-	Width  float32 `json:"width" form:"width"`
-	Height float32 `json:"height" form:"height"`
-	Weight float32 `json:"weight" form:"weight"`
+	Type        string        `json:"type" gorm:"index" form:"type"`
+	Width       float32       `json:"width" form:"width"`
+	Height      float32       `json:"height" form:"height"`
+	Weight      float32       `json:"weight" form:"weight"`
+	Images      []Image       `gorm:"-"`
 }
 
 func (pe *Product) GetError(err error) []string {

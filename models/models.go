@@ -23,6 +23,7 @@ func migrate() {
 		Admin{},
 		Auth{},
 		Product{},
+		Image{},
 		Group{},
 		Role{},
 		Right{},

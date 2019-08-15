@@ -15,6 +15,7 @@ import (
 
 var (
 	productService = &serviceAdmin.ProductService{}
+	imageService   = &serviceAdmin.ImageService{}
 )
 
 func PostChangeProductStatus(c *gin.Context) {
@@ -75,6 +76,8 @@ func DoAddProduct(c *gin.Context) {
 	defer session.Save()
 	var product = models.Product{}
 	_ = c.ShouldBind(&product)
+
+	fmt.Println(product)
 	if err, ok := util.Validator(product, languageAdmin.Product); !ok {
 		session.Set("errors", err)
 		session.Set("product", product)
@@ -94,6 +97,16 @@ func DoAddProduct(c *gin.Context) {
 				if id := productService.AddProduct(product); id > 0 {
 					session.Delete("errors")
 					session.Delete("product")
+
+					if img := c.PostFormArray("img[]"); len(img) > 0 {
+						var imageSlice []models.Image
+						for _, path := range img {
+							image := models.Image{Path: path, ProductId: uint(id)}
+							imageSlice = append(imageSlice, image)
+							imageService.AddImage(imageSlice)
+						}
+					}
+
 					c.Redirect(http.StatusFound, "/admin/product/list")
 				} else {
 					session.Set("errors", map[string]string{"ProductName": "该商品已经存在"})
