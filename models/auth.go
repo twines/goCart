@@ -1,7 +1,9 @@
 package models
 
+import "github.com/jinzhu/gorm"
+
 type Auth struct {
-	ID       int    `gorm:"primary_key" json:"id"`
+	gorm.Model
 	Username string `json:"username"`
 	Password string `json:"password"`
 }

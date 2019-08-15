@@ -1,5 +1,7 @@
 package models
 
+import "github.com/jinzhu/gorm"
+
 type ProductStatus uint8
 
 const (
@@ -8,7 +10,7 @@ const (
 )
 
 type Product struct {
-	Model
+	gorm.Model
 	ProductName string        `json:"product_name" gorm:"size:255;index" form:"productName" validate:"required,gt=6"`
 	Keyword     string        `json:"keyword"  form:"keyword" validate:"required,gt=6"`
 	Description string        `json:"description"  form:"description" validate:"required,gt=6"`

@@ -70,7 +70,8 @@ func PostProductEdit(c *gin.Context) {
 	if err := c.ShouldBind(&form); err != nil {
 		rev = form.GetError(err)
 	} else {
-		product := models.Product{Model: models.Model{ID: form.ID}}
+		product := models.Product{}
+		product.ID = form.ID
 
 		models.DB().First(&product)
 		r, ok := productService.PostSaveProductEdit(form.ID, models.Product{
@@ -194,7 +195,7 @@ func Save(c *gin.Context) {
 			if p.ID <= 0 {
 				c.Abort()
 			} else {
-				product.ID = uint64(id)
+				product.ID = uint(id)
 				if row := productService.UpdateProduct(product); row > 0 {
 					c.Redirect(http.StatusFound, "/admin/product/list")
 				} else {
