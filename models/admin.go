@@ -2,6 +2,11 @@ package models
 
 type Admin struct {
 	User
+	RoleID  uint `json:"password" form:"role" validate:"required,gt=1"`
+	GroupID uint `json:"password" form:"group" validate:"required,gt=1"`
+
+	Group Group
+	Role  Role
 }
 
 func AdminAll() []User {
@@ -11,15 +16,14 @@ func (user Admin) All() []*Admin {
 	users := []*Admin{}
 	DB().Find(&users)
 	for _, user := range users {
-		groups := []*Group{}
-		DB().Model(&user.User).Related(&groups, "Groups")
-		//user.Groups = groups
-		DB().Preload("Groups").Find(user)
-		roles := []*Role{}
-		DB().Model(&user.User).Related(&roles, "Roles")
-		//user.Roles = roles
+		group := Group{}
+		DB().Model(&user).Related(&group)
+		role := Role{}
+		DB().Model(&user).Related(&role)
 
-		DB().Preload("Roles").First(user)
+		user.Role = role
+		user.Group = group
+
 	}
 	return users
 }

@@ -59,20 +59,17 @@
 
                                             <td>
 
-                                                {{if $user.Groups}}
+                                                {{if gt $user.Group.ID 0}}
 
-                                                    {{range $gindex, $group:= $user.Groups}}
-                                                        <span class="badge badge-light">{{$group.Title}}</span>
-                                                    {{end}}
+                                                        <span class="badge badge-light">{{$user.Group.Title}}</span>
 
                                                 {{end}}
-                                            </td> <td>
+                                            </td>
+                                            <td>
 
-                                                {{if $user.Roles}}
+                                                {{if gt $user.Role.ID 0}}
 
-                                                    {{range $gindex, $role:= $user.Roles}}
-                                                        <span class="badge badge-light">{{$role.Title}}</span>
-                                                    {{end}}
+                                                         <span class="badge badge-light">{{$user.Role.Title}}</span>
 
                                                 {{end}}
                                             </td>
@@ -113,35 +110,121 @@
     </div>
 
 
-    <div class="modal fade" id="user-add-modal" tabindex="-1"
-         role="dialog" aria-labelledby="user-add">
 
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span>添加用户</span>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="gridModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">.col-md-4</div>
+                    <div class="col-md-4 col-md-offset-4">.col-md-4 .col-md-offset-4</div>
                 </div>
-                <div class="modal-body">
-                    <form>
+                <div class="row">
+                    <div class="col-md-3 col-md-offset-3">.col-md-3 .col-md-offset-3</div>
+                    <div class="col-md-2 col-md-offset-4">.col-md-2 .col-md-offset-4</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">.col-md-6 .col-md-offset-3</div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-9">
+                        Level 1: .col-sm-9
                         <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <label for="validationDefault01">用户名</label>
-                                <input type="text" class="form-control" id="validationDefault01" placeholder="用户名"
-                                       required>
+                            <div class="col-xs-8 col-sm-6">
+                                Level 2: .col-xs-8 .col-sm-6
                             </div>
-                            <div class="col-md-4 mb-3">
-                                <label for="validationDefault02">默认密码</label>
-                                <input type="text" class="form-control" id="validationDefault02" placeholder="密码"
-                                       value="123456" required>
+                            <div class="col-xs-4 col-sm-6">
+                                Level 2: .col-xs-4 .col-sm-6
                             </div>
                         </div>
-
-                        <button class="btn btn-primary" type="submit">Submit form</button>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
 
+
+
+
+    <div class="modal fade" id="user-add-modal" tabindex="-1"
+         role="dialog" aria-labelledby="user-add-modal">
+        <form action="/admin/user/add" method="POST">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span>添加用户</span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="col-md-4 mb-3">
+                                    <label for="validationDefault01">用户名</label>
+                                    <input type="text" class="form-control" name="name" id="validationDefault01" placeholder="用户名"
+                                           required>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="validationDefault02">默认密码</label>
+                                    <input type="text" class="form-control" name="password" id="validationDefault02" placeholder="密码"
+                                           value="123456" required>
+                                </div>
+                            </div>
+
+
+                        </div>
+                             <div class="row">
+                                <div class="col-sm-3">
+                                    <h3>分组</h3>
+                                </div>
+                            </div>
+                            <div class="row">
+                                {{if .groups}}
+
+                                    {{range $index, $group:= .groups}}
+                                        <div class="form-check form-check-inline col-md-4 col-md-offset-1">
+                                            <input class="form-check-input" type="radio" name="group"
+                                                   id="inlineRadio-{{$group.ID}}" value="{{$group.ID}}">
+                                            <label class="form-check-label" for="inlineRadio1">{{$group.Title}}</label>
+                                        </div>
+                                    {{end}}
+                                {{end}}
+                            </div>
+
+                             <div class="row">
+                                <div class="col-sm-3">
+                                    <h3>分配职位</h3>
+                                </div>
+
+                            </div>
+                            <div class="form-group row">
+                                {{if .roles}}
+                                    {{range $index, $role:= .roles}}
+                                        <div class="form-check form-check-inline col-md-4 col-md-offset-1">
+                                            <input class="form-check-input" type="radio" name="role"
+                                                   id="inlineRadio-{{$role.ID}}" value="{{$role.ID}}">
+                                            <label class="form-check-label" for="inlineRadio1">{{$role.Title}}</label>
+                                        </div>
+                                    {{end}}
+
+                                {{end}}
+                            </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </form>
     </div>
     <script>
         console.debug({{.productList}});

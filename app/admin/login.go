@@ -32,12 +32,15 @@ func DoLogin(c *gin.Context) {
 	session := sessions.Default(c)
 	defer session.Save()
 	var admin = models.Admin{}
-	_ = c.ShouldBind(&admin)
-	if err, ok := util.Validator(admin, languageAdmin.Admin); !ok {
+	user := models.User{}
+
+	_ = c.ShouldBind(&user)
+	if err, ok := util.Validator(user, languageAdmin.Admin); !ok {
 		session.Set("errs", err)
 		session.Set("admin", admin)
 		c.Redirect(http.StatusFound, "/admin/login")
 	} else {
+		admin.User = user
 		sa.GetAdminByName(&admin)
 		if admin.ID <= 0 {
 			session.Set("errs", map[string]string{"UserName": "该用户不存在"})
