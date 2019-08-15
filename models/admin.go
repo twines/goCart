@@ -2,11 +2,11 @@ package models
 
 type Admin struct {
 	User
-	RoleID  uint `json:"password" form:"role" validate:"required,gt=1"`
-	GroupID uint `json:"password" form:"group" validate:"required,gt=1"`
-
-	Group Group
-	Role  Role
+	RoleID  uint     `json:"password" form:"role" validate:"required,gt=1"`
+	GroupID uint     `json:"password" form:"group" validate:"required,gt=1"`
+	Groups  []*Group `gorm:"many2many:member_groups;"`
+	Group   Group
+	Role    Role
 }
 
 func AdminAll() []User {
@@ -23,6 +23,8 @@ func (user Admin) All() []*Admin {
 
 		user.Role = role
 		user.Group = group
+		user.Groups = []*Group{}
+		DB().Model(user).Association("Groups").Find(&user.Groups)
 
 	}
 	return users

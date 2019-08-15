@@ -23,8 +23,6 @@ func AddUserPage(c *gin.Context) {
 }
 func DoAddUser(c *gin.Context) {
 	admin := models.Admin{}
-	//user:=models.User{}
-
 	if err := c.Bind(&admin); err != nil {
 		errResults, ok := util.Validator(admin, map[string]string{
 			"UserName": "用户名",
@@ -43,15 +41,12 @@ func DoAddUser(c *gin.Context) {
 		models.DB().Model(&admin).Related(&group)
 		role := models.Role{}
 		models.DB().Model(&admin).Related(&role)
-
-		//admin.Group = group
-		//admin.Role = role
-
 		//创建用户并关联组 角色
-
 		admin.Password = util.EncodeMD5(admin.Password)
 		models.DB().Save(&admin)
+		models.DB().Model(&admin).Association("Groups").Append(group) //关联到组中
 	}
+
 	c.Redirect(http.StatusFound, "/admin/user/list")
 
 }

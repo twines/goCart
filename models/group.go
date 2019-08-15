@@ -2,32 +2,19 @@ package models
 
 type Group struct {
 	Model
-	Users     []*User
-	Title     string
-	CreaterID uint //创建这ID
+	Members   []*Admin `gorm:"many2many:member_groups;"`
+	Title     string   `form:"title" validate:"required,gt=3"`
+	CreaterID uint     //创建这ID
+	Status    int8
 }
 
+func (g Group) GetByTitle() Group {
+	group := Group{}
+	DB().First(&group, "title=?", g.Title)
+	return group
+}
 func AllGroups() []Group {
 	groups := []Group{}
 	DB().Find(&groups)
 	return groups
-}
-
-type Role struct {
-	Model
-	Title  string
-	Users  []*User
-	Rights []Right
-}
-
-func AllRoles() []Role {
-	roles := []Role{}
-	DB().Find(&roles)
-	return roles
-}
-
-type Right struct {
-	Model
-	Brief string
-	Roles []Role `gorm:"many2many:role_rights;"`
 }

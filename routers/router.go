@@ -48,6 +48,9 @@ func InitRouter() *gin.Engine {
 		//admin已经登录
 		{
 			adminGroup.Use(admin2.Admin())
+
+			adminGroup.POST("/group/add", admin.DoAddGroup)
+
 			//用户列表
 			adminGroup.GET("/user/list", admin.User)
 			adminGroup.GET("/user/add", admin.AddUserPage)
