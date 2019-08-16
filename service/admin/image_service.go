@@ -12,8 +12,8 @@ func (is *ImageService) AddImage(imageSlice []models.Image) {
 		models.DB().Create(&img)
 	}
 }
-func (is *ImageService) GetProductImageByProductId(productId uint) []models.Image {
-	var imageSlice []models.Image
-	models.DB().Where("product_id=?", productId).Find(&imageSlice)
+func (is *ImageService) GetProductImageByProductId(product models.Product) []*models.Image {
+	var imageSlice []*models.Image
+	models.DB().Model(&product).Related(&imageSlice)
 	return imageSlice
 }

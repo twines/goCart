@@ -24,7 +24,7 @@ type Product struct {
 	Width       float32       `json:"width" form:"width"`
 	Height      float32       `json:"height" form:"height"`
 	Weight      float32       `json:"weight" form:"weight"`
-	Images      []Image       `gorm:"-"`
+	Image       []*Image
 }
 
 func (pe *Product) GetError(err error) []string {

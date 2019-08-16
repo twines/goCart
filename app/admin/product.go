@@ -58,7 +58,7 @@ func GetProductList(c *gin.Context) {
 	productList := productService.GetProduct(p.CurrentPage, limit)
 	if len(productList) > 0 {
 		for index, product := range productList {
-			productList[index].Images = imageService.GetProductImageByProductId(product.ID)
+			productList[index].Image = imageService.GetProductImageByProductId(product)
 		}
 	}
 	c.HTML(http.StatusOK, "admin.product.list", gin.H{"productList": productList, "title": "商品列表", "paginate": paginate})
