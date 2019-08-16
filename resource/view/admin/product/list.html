@@ -48,8 +48,14 @@
                                                 {{$product.ProductName}}
                                             </td>
                                             <td>
-                                                <img src="{{$product.Images}}">
-                                                {{$product.Images}}
+                                                {{range $i,$p:=$product.Images}}
+                                                    {{if eq $i 0}}
+                                                        <div class="row">
+                                                            <img class=" img-md"
+                                                                 src="/{{.Path}}">
+                                                        </div>
+                                                    {{end}}
+                                                {{end}}
                                             </td>
                                             <td>{{$product.Price}}</td>
                                             <td>{{$product.Sku}}</td>

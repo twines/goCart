@@ -56,6 +56,11 @@ func GetProductList(c *gin.Context) {
 	paginate := p.Paginate()
 	limit := p.PerPage
 	productList := productService.GetProduct(p.CurrentPage, limit)
+	if len(productList) > 0 {
+		for index, product := range productList {
+			productList[index].Images = imageService.GetProductImageByProductId(product.ID)
+		}
+	}
 	c.HTML(http.StatusOK, "admin.product.list", gin.H{"productList": productList, "title": "商品列表", "paginate": paginate})
 }
 func AddProductPage(c *gin.Context) {
@@ -76,8 +81,6 @@ func DoAddProduct(c *gin.Context) {
 	defer session.Save()
 	var product = models.Product{}
 	_ = c.ShouldBind(&product)
-
-	fmt.Println(product)
 	if err, ok := util.Validator(product, languageAdmin.Product); !ok {
 		session.Set("errors", err)
 		session.Set("product", product)

@@ -56,6 +56,9 @@ func (ps *ProductService) GetProductBySku(sku string) models.Product {
 	models.DB().Where("sku=?", sku).First(&product)
 	return product
 }
-func (ps *ProductService) AddProduct(product models.Product) int64 {
-	return models.DB().Create(&product).RowsAffected
+func (ps *ProductService) AddProduct(product models.Product) uint {
+	if row := models.DB().Create(&product).RowsAffected; row > 0 {
+		return product.ID
+	}
+	return 0
 }
