@@ -48,8 +48,25 @@ func InitRouter() *gin.Engine {
 		//admin已经登录
 		{
 			adminGroup.Use(admin2.Admin())
-
+			//>>>>>>>>>>===========================创建组织 下的角色权限人员均属于这个组织
+			//添加分组
+			adminGroup.GET("/group/list", admin.Group)
 			adminGroup.POST("/group/add", admin.DoAddGroup)
+
+			//为分组添加角色
+			adminGroup.GET("/group/role/manage/:groudId", admin.GroupRoles)
+			adminGroup.GET("/group/user/manage/:groudId", admin.GroupUsers)
+
+			//微信通中添加一个角色
+			adminGroup.POST("/role/add", admin.DoAddRole)
+			//将多个角色赋值给分组
+			adminGroup.POST("/role/bind/group", admin.DoBindRoles2Group)
+
+			//为角色分配权限
+
+			//添加账号 绑定角色与组织结构
+
+			//<<<<<<<<<==============================
 
 			//用户列表
 			adminGroup.GET("/user/list", admin.User)

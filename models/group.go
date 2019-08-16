@@ -8,6 +8,7 @@ type Group struct {
 	Title     string   `form:"title" validate:"required,gt=3"`
 	CreaterID uint     //创建这ID
 	Status    int8
+	Roles     []*Role `gorm:"many2many:group_roles;"`
 }
 
 func (g Group) GetByTitle() Group {

@@ -8,14 +8,20 @@ import "github.com/jinzhu/gorm"
 
 type Role struct {
 	gorm.Model
-	Title  string
+	Title  string `form:"title" validate:"required,gt=3"`
 	Users  []*User
 	Rights []Right
 	Status int8
+	Groups []*Group `gorm:"many2many:group_roles;"`
 }
 
 func AllRoles() []Role {
 	roles := []Role{}
 	DB().Find(&roles)
 	return roles
+}
+func (role Role) FindByTitle() Role {
+	r := Role{Title: role.Title}
+	DB().Find(&r, "title=?", role.Title)
+	return r
 }

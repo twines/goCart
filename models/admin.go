@@ -6,7 +6,7 @@ type Admin struct {
 	GroupID uint     `json:"password" form:"group" validate:"required,gt=1"`
 	Groups  []*Group `gorm:"many2many:member_groups;"`
 	Group   Group    //group控制页面路径访问
-	Role    []*Role  //可以分配多个角色，角色控制数据和操作访问
+	Role    Role     //可以分配多个角色，角色控制数据和操作访问
 	Title   string   //职位名称
 }
 
