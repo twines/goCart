@@ -1,110 +1,54 @@
-{{define "admin.user.list"}}
+{{define "admin.group.list"}}
     {{template "admin.app" .}}
-    {{template "admin.user.content" .}}
+    {{template "admin.group.content" .}}
     {{template "admin.footer"}}
 {{end}}
 
-{{define "admin.user.content"}}
+{{define "admin.group.content"}}
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                用户管理
-                <small>用户列表</small>
+                组织结构管理
+                <small>组列表</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/admin"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="/admin/user/list">用户管理</a></li>
-                <li class="active">用户列表</li>
+                <li class="active">组织结构列表</li>
             </ol>
         </section>
         <!-- Main content -->
         <section class="content">
             <div class="row">
                 <div class="col-xs-12">
-                    {{if .groups}}
-                        <a class="btn btn-primary" href="#user-add-modal" data-toggle="modal" id="user-add">添加用户</a>
 
-                        <a class="btn btn-primary" href="#group-add-modal" data-toggle="modal" id="group-add">添加分组</a>
-                    {{else}}
-                        <a class="btn btn-primary" href="#group-add-modal" data-toggle="modal" id="group-add">添加分组</a>
-                    {{end}}
+                    <a class="btn btn-primary" href="#group-add-modal" data-toggle="modal" id="group-add">添加分组</a>
+
                 </div>
 
             </div>
-            {{if  .users }}
-                <div class="row">
-                    <div class="col-xs-12">
+            {{if  .groups }}
+                <ul>
+
+                    {{range $index,$group:= .groups}}
                         <div class="box">
+                            <div class="box-title">{{$group.Title}}</div>
                             <div class="box-body">
-                                <table class="table table-bordered table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>id</th>
-                                        <th>姓名</th>
-                                        <th class="col-md-1 col-sm-1">密码</th>
-                                        <th>状态</th>
-                                        <th class="col-md-2">所属组</th>
-                                        <th class="col-md-2">职务(角色)</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {{range $k,$user:=.users}}
-                                        <tr>
-                                            <td>{{$user.ID}}</td>
-                                            <td>
-                                                {{$user.UserName}}
-                                            </td>
-                                            <td>{{$user.Password}}</td>
-                                            {{if eq $user.Status 0}}
-                                                <td>正常</td>
-                                            {{else}}
-                                                <td>已上架</td>
-                                            {{end}}
 
-                                            <td>
-
-                                                {{if gt $user.Group.ID 0}}
-
-                                                    <span class="badge badge-light">{{$user.Group.Title}}</span>
-                                                {{else}}
-                                                    <button class="btn btn-info">设置分组</button>
-                                                {{end}}
-                                            </td>
-                                            <td>
-
-                                                {{if gt $user.Role.ID 0}}
-
-                                                    <span class="badge badge-light">{{$user.Role.Title}}</span>
-                                                {{else}}
-                                                    <button class="btn btn-info">设置职位(务)</button>
-                                                {{end}}
-                                            </td>
-                                        </tr>
-
-                                    {{else}}
-                                        <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
-                                            <td>
-                                                <button class="btn btn-pinterest">添加</button>
-                                            </td>
-                                        </tr>
-                                    {{end}}
-                                    </tbody>
-                                </table>
                             </div>
-                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <div class=" col-md-1">
+                                    <a href="role/manage/{{$group.ID}}">职位管理</a>
+                                </div>
+                                <div class=" col-md-1">
+                                    <a href="user/manage/{{$group.ID}}">人员管理</a>
+                                </div>
+                            </div>
                         </div>
-                        <!-- /.box -->
-                    </div>
-                    <!-- /.col -->
-                </div>
+                    {{end}}
+                </ul>
+
                 <!-- /.row -->
                 <div class="row text-center">
                     {{.paginate}}

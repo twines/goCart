@@ -7,8 +7,6 @@ type User struct {
 	UserName string `json:"user_name" form:"name" validate:"required,gt=2"`
 	Password string `json:"password" form:"password" validate:"required,gt=5,lt=32"`
 	Status   int8
-	Roles    []*Role  `gorm:"many2many:user_roles;"`  //一个人可以担当多个角色
-	Groups   []*Group `gorm:"many2many:user_groups;"` //可以把一个人分属与多个组合部门
 }
 
 func All() []User {

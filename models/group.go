@@ -4,19 +4,20 @@ import "github.com/jinzhu/gorm"
 
 type Group struct {
 	gorm.Model
-	Users []*User `gorm:"many2many:user_groups;"` //一个组里可以有多个人
-	Title string
+	Members   []*Admin `gorm:"many2many:member_groups;"`
+	Title     string   `form:"title" validate:"required,gt=3"`
+	CreaterID uint     //创建这ID
+	Status    int8
+	Roles     []*Role `gorm:"many2many:group_roles;"`
 }
-type Role struct {
-	gorm.Model
-	Title string
 
-	Users []*User `gorm:"many2many:user_roles;"`
-
-	Rights []Right `gorm:"many2many:role_rights;"`//一个角色被分配多个权限（开发人员 可以开发也可做测试，也可以发布App）
+func (g Group) GetByTitle() Group {
+	group := Group{}
+	DB().First(&group, "title=?", g.Title)
+	return group
 }
-type Right struct {
-	gorm.Model
-	Brief string
-	Roles []Role `gorm:"many2many:role_rights;"`
+func AllGroups() []Group {
+	groups := []Group{}
+	DB().Find(&groups)
+	return groups
 }
