@@ -4,8 +4,10 @@
 */
 package models
 
+import "github.com/jinzhu/gorm"
+
 type Right struct {
-	Model
+	gorm.Model
 	Brief string
 	Roles []Role `gorm:"many2many:role_rights;"`
 }

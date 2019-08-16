@@ -9,7 +9,7 @@ type ProductService struct {
 }
 
 //不建议直接在service层返回错误信息，最好用状态码的形式返回
-func (ps *ProductService) PostSaveProductEdit(id uint64, product models.Product) (string, bool) {
+func (ps *ProductService) PostSaveProductEdit(id uint, product models.Product) (string, bool) {
 	model := models.Product{}
 	models.DB().First(&model, "ID=?", id)
 	if model.ID <= 0 || model.ID != id {

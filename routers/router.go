@@ -68,13 +68,14 @@ func InitRouter() *gin.Engine {
 			adminGroup.POST("/product/save/:id", admin.Save)
 
 			adminGroup.POST("/product/off", admin.PostChangeProductStatus)
-			adminGroup.POST("/product/edit", admin.PostProductEdit)
-			adminGroup.GET("/error", admin.ParamaterError)
 
 			//图片上传
 			//adminGroup.POST("/upload", admin.Upload)
 			////多图上传
 			//adminGroup.POST("/upload/multi", admin.UploadMulti)
+
+			//订单列表
+			adminGroup.GET("/order/list", admin.OrderList)
 		}
 	}
 	//web前端

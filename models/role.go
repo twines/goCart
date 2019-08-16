@@ -4,8 +4,10 @@
 */
 package models
 
+import "github.com/jinzhu/gorm"
+
 type Role struct {
-	Model
+	gorm.Model
 	Title  string
 	Users  []*User
 	Rights []Right

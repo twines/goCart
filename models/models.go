@@ -7,19 +7,11 @@ import (
 
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"time"
 )
 
 var (
 	db *gorm.DB
 )
-
-type Model struct {
-	ID        uint64 `json:"id" gorm:"primary_key" form:"ID" `
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time
-}
 
 func DB() *gorm.DB {
 	return db
@@ -31,9 +23,13 @@ func migrate() {
 		Admin{},
 		Auth{},
 		Product{},
+		Image{},
 		Group{},
 		Role{},
 		Right{},
+		Order{},
+		OrderProduct{},
+		Address{},
 	}
 	db.AutoMigrate(models...)
 }

@@ -1,7 +1,9 @@
 package models
 
+import "github.com/jinzhu/gorm"
+
 type Group struct {
-	Model
+	gorm.Model
 	Members   []*Admin `gorm:"many2many:member_groups;"`
 	Title     string   `form:"title" validate:"required,gt=3"`
 	CreaterID uint     //创建这ID

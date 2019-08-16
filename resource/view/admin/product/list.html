@@ -32,6 +32,7 @@
                                     <tr>
                                         <th>id</th>
                                         <th>名称</th>
+                                        <th>图片</th>
                                         <th class="col-md-1 col-sm-1">价格（￥）</th>
                                         <th>Sku</th>
                                         <th>库存(个)</th>
@@ -45,6 +46,10 @@
                                             <td>{{$product.ID}}</td>
                                             <td>
                                                 {{$product.ProductName}}
+                                            </td>
+                                            <td>
+                                                <img src="{{$product.Images}}">
+                                                {{$product.Images}}
                                             </td>
                                             <td>{{$product.Price}}</td>
                                             <td>{{$product.Sku}}</td>

@@ -9,13 +9,13 @@ import (
 	"goCart/models"
 	"goCart/pkg/util"
 	"goCart/service/admin"
-	"log"
 	"net/http"
 	"strconv"
 )
 
 var (
 	productService = &serviceAdmin.ProductService{}
+	imageService   = &serviceAdmin.ImageService{}
 )
 
 func PostChangeProductStatus(c *gin.Context) {
@@ -48,54 +48,6 @@ func PostChangeProductStatus(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/admin/product/list")
 	//c.JSON(http.StatusOK, ProductChangeResult{Result: result})
 }
-func ParamaterError(c *gin.Context) {
-	ss := sessions.Default(c)
-	code := ss.Get("code")
-	msg := ss.Get("result")
-	log.Println(msg, code)
-	ss.Delete("code")
-	ss.Delete("result")
-	_ = ss.Save()
-
-	c.HTML(http.StatusOK, "admin.error", gin.H{"code": code, "msg": "提示", "result": msg})
-}
-
-func PostProductEdit(c *gin.Context) {
-	ss := sessions.Default(c)
-	ss.Delete("code")
-	ss.Delete("msg")
-
-	var form models.Product
-	var rev []string
-	if err := c.ShouldBind(&form); err != nil {
-		rev = form.GetError(err)
-	} else {
-		product := models.Product{Model: models.Model{ID: form.ID}}
-
-		models.DB().First(&product)
-		r, ok := productService.PostSaveProductEdit(form.ID, models.Product{
-			Price:       form.Price,
-			Sku:         form.Sku,
-			ProductName: form.ProductName,
-			Stock:       form.Stock})
-
-		if ok {
-			//c.Redirect(http.StatusFound, "/admin/product/list")
-		} else {
-			rev = append(rev, r)
-		}
-	}
-	if len(rev) > 0 { //存在问题
-		ss.Set("code", 1)
-		ss.Set("result", rev)
-		_ = ss.Save()
-		c.Redirect(http.StatusFound, "/admin/error")
-	} else {
-		c.Redirect(http.StatusFound, "/admin/product/list")
-	}
-
-	log.Println(form)
-}
 func GetProductList(c *gin.Context) {
 	p := util.Paginate{
 		Context:     c,
@@ -124,6 +76,8 @@ func DoAddProduct(c *gin.Context) {
 	defer session.Save()
 	var product = models.Product{}
 	_ = c.ShouldBind(&product)
+
+	fmt.Println(product)
 	if err, ok := util.Validator(product, languageAdmin.Product); !ok {
 		session.Set("errors", err)
 		session.Set("product", product)
@@ -143,6 +97,16 @@ func DoAddProduct(c *gin.Context) {
 				if id := productService.AddProduct(product); id > 0 {
 					session.Delete("errors")
 					session.Delete("product")
+
+					if img := c.PostFormArray("img[]"); len(img) > 0 {
+						var imageSlice []models.Image
+						for _, path := range img {
+							image := models.Image{Path: path, ProductId: uint(id)}
+							imageSlice = append(imageSlice, image)
+							imageService.AddImage(imageSlice)
+						}
+					}
+
 					c.Redirect(http.StatusFound, "/admin/product/list")
 				} else {
 					session.Set("errors", map[string]string{"ProductName": "该商品已经存在"})
@@ -194,7 +158,7 @@ func Save(c *gin.Context) {
 			if p.ID <= 0 {
 				c.Abort()
 			} else {
-				product.ID = uint64(id)
+				product.ID = uint(id)
 				if row := productService.UpdateProduct(product); row > 0 {
 					c.Redirect(http.StatusFound, "/admin/product/list")
 				} else {
