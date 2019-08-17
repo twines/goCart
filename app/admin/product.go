@@ -20,9 +20,9 @@ var (
 
 func PostChangeProductStatus(c *gin.Context) {
 	type ProductChangeForm struct {
-		CategoryId string               `form:"category_id" binding:"required`
-		Pid        string               `form:"pid" binding:"required`
-		Status     models.ProductStatus `form:"status" binding:"required`
+		CategoryId string `form:"category_id" binding:"required`
+		Pid        string `form:"pid" binding:"required`
+		Status     uint8  `form:"status" binding:"required`
 	}
 
 	type ProductChangeResult struct {
