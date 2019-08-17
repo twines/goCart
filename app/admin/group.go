@@ -5,18 +5,21 @@
 package admin
 
 import (
+	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"goCart/models"
 	"goCart/pkg/util"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 func Group(c *gin.Context) {
 
 	type gmodel struct {
 		UserId string
+		GroupId string
 		Groups []models.Group
 	}
 
@@ -28,7 +31,21 @@ func Group(c *gin.Context) {
 		value.UserId = userId
 
 	}
-	c.HTML(http.StatusOK, "admin.group.list", gin.H{"value": value})
+	if groupId,exists:= c.GetQuery("groupId"); exists {
+		value.GroupId = groupId
+
+	}
+	if len(value.GroupId)>0 {
+
+	}
+	if len(value.UserId)>0&& len(value.GroupId)>0 {
+		c.HTML(http.StatusOK, "admin.group.list", gin.H{"value": value})
+
+	}else {
+		c.HTML(http.StatusOK, "admin.group.list", gin.H{"value": value})
+
+	}
+
 
 }
 func GroupRoles(c *gin.Context) {
@@ -50,39 +67,67 @@ func GroupRoles(c *gin.Context) {
 	})
 }
 func GroupStaff(c *gin.Context) {
+	ss := sessions.Default(c)
+	defer ss.Save()
 
 	groupId := c.Param("groudId")
 	log.Println(groupId)
-	staffs := []*models.Staff{}
-	//models.DB().Find(&staffs,"status=? and group_id=?",0,groupId)
-	uid, exists := "", false
-	if uid, exists = c.GetQuery("userId"); exists {
-		models.DB().Find(&staffs, " group_id=? and admin_id<>?", groupId, uid)
+	ss.Set("groupId", groupId)
+	ss.Set("fromStaff", true)
 
-	} else {
-		models.DB().Find(&staffs, " group_id=?", groupId)
+	staffs := models.StaffsBy(groupId)
+	//models.DB().Find(&staffs,"status=? and group_id=?",0,groupId)
+	uid, hasUid := c.GetQuery("userId")
+
+	staffExists := false
+	for _,staff:=range staffs{
+		 if strconv.Itoa(int(staff.Admin.ID)) == uid{//已经存在啦
+		 staffExists = true
+		 	break
+		 }
+	}
+
+	staff:=models.Staff{}
+	models.DB().Find(&staff,"admin_id=?", uid)
+
+	if staff.ID>0 && staff.Status ==0 {//说明职员已经存在，且正常
 
 	}
-	//models.DB().Find(&staffs)
-	for _, staff := range staffs {
-		admin := models.Admin{}
-		group := models.Group{}
-		role := models.Role{}
+	if hasUid && staffExists == false &&(staff.ID==0) {
+		//选取的人员存在，添加职员
+		admin:=models.Admin{}
+		group:=models.Group{}
 
-		models.DB().Model(staff).Related(&group)
-		models.DB().Model(staff).Related(&role)
-		models.DB().Model(staff).Related(&admin)
-
-		staff.Role = role
+		models.DB().Find(&admin,"id=?", uid)
+		models.DB().Find(&group,"id=?", groupId)
 		staff.Admin = admin
 		staff.Group = group
-	}
-	if exists {
-		c.HTML(http.StatusOK, "admin.group.staff.list", gin.H{"staffs": staffs,"userId":uid})
-	}else {
-		c.HTML(http.StatusOK, "admin.group.staff.list", gin.H{"staffs": staffs})
+		rev:= models.DB().Save(&staff)
+		if rev!=nil {
+			log.Println(rev)
+		}
+
+		staffs = models.StaffsBy(groupId)
+
+		c.HTML(http.StatusOK, "admin.group.staff.list", gin.H{"staffs": staffs, "userId": uid,
+			"groupId": groupId,
+		"info":fmt.Sprintf("不能重复分派%v",admin.UserName)})
+	} else {
+		staffs = models.StaffsBy(groupId)
+		if staff.ID==0 {
+			c.HTML(http.StatusOK, "admin.group.staff.list", gin.H{"staffs": staffs, "groupId": groupId})
+
+		}else {
+			admin:=models.Admin{}
+			models.DB().Find(&admin,"id=?", uid)
+
+			c.HTML(http.StatusOK, "admin.group.staff.list", gin.H{"staffs": staffs, "groupId": groupId,
+				"info":fmt.Sprintf("不能重复分派%v",admin.UserName)})
+
+		}
 	}
 }
+
 func DoAddGroup(c *gin.Context) {
 	group := models.Group{}
 	ss := sessions.Default(c)

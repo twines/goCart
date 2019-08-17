@@ -19,6 +19,8 @@
                 <li class="active">用户列表</li>
             </ol>
         </section>
+        {{$userId:=.userId}}
+        {{$groupId:=.groupId}}
         <!-- Main content -->
         <section class="content">
             <div class="row">
@@ -52,7 +54,12 @@
                                         <tr>
                                             <td>{{$user.ID}}</td>
                                             <td>
-                                                <a href="/admin/group/list?userId={{$user.ID}}">{{$user.UserName}}</a>
+
+                                                    {{if $groupId}}
+                                                        <a href="/admin/group/staff/manage/{{$groupId}}?userId={{$user.ID}}">{{$user.UserName}}</a>
+                                                        {{else}}
+                                                        <a href="/admin/group/list?userId={{$user.ID}}">{{$user.UserName}}</a>
+                                                    {{end}}
                                             </td>
                                             <td>{{$user.Password}}</td>
                                             <td>

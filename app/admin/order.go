@@ -13,6 +13,12 @@ var (
 
 func OrderList(c *gin.Context) {
 	orderSlice := orderService.GetOrderList()
+	if len(orderSlice) > 0 {
+		for k, order := range orderSlice {
+			orderSlice[k].User = orderService.GetOrderUser(order)
+			orderSlice[k].Address = orderService.GetOrderAddress(order)
+		}
+	}
 	paginate := util.Paginate{Context: c}
 	p := paginate.Paginate()
 	c.HTML(http.StatusOK, "admin.order.list", gin.H{"orderSlice": orderSlice, "paginate": p})

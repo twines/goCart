@@ -13,11 +13,35 @@ func User(c *gin.Context) {
 	users := models.Admin{}.All()
 	groups := models.AllGroups()
 	roles := models.AllRoles()
-	c.HTML(http.StatusOK, "admin.user.list", gin.H{
-		"users":  users,
-		"groups": groups,
-		"roles":  roles,
-	})
+	//从组织结构过来
+	if groudId, exists := c.GetQuery("groupId"); exists {
+		if userId, uExists := c.GetQuery("userId"); uExists {
+			c.HTML(http.StatusOK, "admin.user.list", gin.H{
+				"users":   users,
+				"groups":  groups,
+				"roles":   roles,
+				"groupId": groudId,
+				"userId":  userId,
+			})
+		} else {
+			//为某一部门添加人员
+			c.HTML(http.StatusOK, "admin.user.list", gin.H{
+				"users":   users,
+				"groups":  groups,
+				"roles":   roles,
+				"groupId": groudId,
+			})
+		}
+
+	} else {
+
+		c.HTML(http.StatusOK, "admin.user.list", gin.H{
+			"users":  users,
+			"groups": groups,
+			"roles":  roles,
+		})
+	}
+
 }
 func AddUserPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "admin.user.add", gin.H{})

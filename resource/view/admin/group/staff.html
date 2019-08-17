@@ -18,7 +18,7 @@
                     <li><a href="/admin/group/list?userId={{.userId}}">组织结构</a></li>
 
                 {{else}}
-                <li><a href="/admin/group/list">组织结构</a></li>
+                    <li><a href="/admin/group/list">组织结构</a></li>
                 {{end}}
                 <li class="active">职员管理</li>
             </ol>
@@ -28,8 +28,14 @@
             <div class="row">
                 <div class="col-xs-12">
 
-                    <a class="btn btn-primary" href="#group-add-modal" data-toggle="modal" id="group-add">添加职员</a>
-
+                    {{/*                    <a class="btn btn-primary" href="#group-add-modal" data-toggle="modal" id="group-add">添加职员</a>*/}}
+                    {{if .userId}}
+                        <a class="btn btn-primary" href="/admin/user/list?userId={{.userId}}&groupId={{.groupId}}"
+                           data-toggle="modal" id="group-add">添加职员</a>
+                    {{else}}
+                        <a class="btn btn-primary" href="/admin/user/list?groupId={{.groupId}}" data-toggle="modal"
+                           id="group-add">选择职员</a>
+                    {{end}}
                 </div>
 
             </div>
@@ -73,7 +79,7 @@
                                                 {{if eq $staff.Status 0}}
                                                     <button class="btn-primary">停用</button>
                                                 {{else}}
-<button class="btn-primary">启用</button>
+                                                    <button class="btn-primary">启用</button>
                                                 {{end}}
                                             </td>
                                         </tr>
@@ -92,8 +98,11 @@
                 </div>
             {{else}}
                 还没用户
-            {{end}}
 
+            {{end}}
+            {{if .info}}
+                <button id="info" class="btn-warning btn" onclick="back()">{{.info}}</button>
+            {{end}}
         </section>
         <!-- /.content -->
     </div>
@@ -167,6 +176,19 @@
         function staffNameChanged(e) {
             console.log(e.value);
         }
+        function back() {
+            window.history.back();
+        }
+        function warning() {
+            var info={{.info}};
+            if (info !== undefined && info.length > 0) {
+                setTimeout(function () {
+                    back();
+                },3000);
+            }
+        }
+
+        warning();
     </script>
 {{end}}
 

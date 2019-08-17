@@ -16,3 +16,23 @@ type Staff struct {
 
 	Status int8
 }
+
+
+func StaffsBy(groupId string) []*Staff{
+	staffs := []*Staff{}
+	 DB().Find(&staffs, " group_id=?", groupId)
+	for _, staff := range staffs {
+		admin :=  Admin{}
+		group :=  Group{}
+		role :=  Role{}
+
+		 DB().Model(staff).Related(&group)
+		 DB().Model(staff).Related(&role)
+		 DB().Model(staff).Related(&admin)
+
+		staff.Role = role
+		staff.Admin = admin
+		staff.Group = group
+	}
+	return staffs
+}
