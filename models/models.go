@@ -28,6 +28,7 @@ func migrate() {
 		Role{},
 		Right{},
 		Order{},
+		Express{},
 		OrderProduct{},
 		Address{},
 	}
@@ -58,9 +59,4 @@ func Setup() {
 	db.DB().SetMaxIdleConns(10)
 	db.DB().SetMaxOpenConns(100)
 	go migrate()
-}
-
-// CloseDB closes database connection (unnecessary)
-func CloseDB() {
-	defer db.Close()
 }

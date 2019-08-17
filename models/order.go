@@ -7,8 +7,10 @@ type Order struct {
 	Status       uint8  `json:"status" gorm:"default:1"`
 	UserId       uint   `json:"user_id" gorm:"index;not null"`
 	OrderNumber  string `json:"order_number" gorm:"UNIQUE_INDEX;not null"`
-	AddressId    uint   `json:"address_id"`
+	AddressId    uint   `json:"address_id" gorm:"index;mot null"`
+	ExpressId    uint   `json:"express_id" gorm:"index;not null"`
 	OrderProduct []OrderProduct
 	Address      Address
 	User         User
+	Express      Express
 }
