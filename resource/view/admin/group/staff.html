@@ -1,0 +1,176 @@
+{{define "admin.group.staff.list"}}
+    {{template "admin.app" .}}
+    {{template "admin.group.staff.content" .}}
+    {{template "admin.footer"}}
+{{end}}
+
+{{define "admin.group.staff.content"}}
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                职员管理
+                <small>职员列表</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="/admin"><i class="fa fa-dashboard"></i> 首页</a></li>
+                {{if .userId}}
+                    <li><a href="/admin/group/list?userId={{.userId}}">组织结构</a></li>
+
+                {{else}}
+                <li><a href="/admin/group/list">组织结构</a></li>
+                {{end}}
+                <li class="active">职员管理</li>
+            </ol>
+        </section>
+        <!-- Main content -->
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+
+                    <a class="btn btn-primary" href="#group-add-modal" data-toggle="modal" id="group-add">添加职员</a>
+
+                </div>
+
+            </div>
+            {{if  .staffs }}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="box">
+                            <div class="box-body">
+                                <table class="table table-bordered table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>编号</th>
+                                        <th>姓名</th>
+                                        <th class="col-md-2">职务(角色)</th>
+                                        <th>状态</th>
+                                        <th>管理</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {{range $index,$staff:= .staffs}}
+                                        <tr>
+                                            <td>
+                                                {{$staff.ID}}
+                                            </td>
+                                            <td>
+                                                {{$staff.Admin.UserName}}
+                                            </td>
+                                            <td>
+                                                {{$staff.Role.Title}}
+                                            </td>
+
+                                            <td>
+                                                {{if eq $staff.Status 0}}
+                                                    正常
+                                                {{else}}
+                                                    暂停使用
+                                                {{end}}
+                                                {{$staff.Status}}
+                                            </td>
+                                            <td>
+                                                {{if eq $staff.Status 0}}
+                                                    <button class="btn-primary">停用</button>
+                                                {{else}}
+<button class="btn-primary">启用</button>
+                                                {{end}}
+                                            </td>
+                                        </tr>
+                                    {{end}}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- /.row -->
+                <div class="row text-center">
+                    {{.paginate}}
+                </div>
+            {{else}}
+                还没用户
+            {{end}}
+
+        </section>
+        <!-- /.content -->
+    </div>
+
+
+    <div class="modal fade" id="group-add-modal" tabindex="-1"
+         role="dialog" aria-labelledby="group-add">
+        <form action="/admin/group/add" method="POST">
+            <div class="modal-dialog modal-dialog-centered " role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span>添加分组</span>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="col-md-5">
+                                    <label for="validationDefault01">员工检索</label>
+                                    <input type="text" class="form-control" oninput="staffNameChanged(this)"
+                                           name="title" id="validationDefault01"
+                                           placeholder="员工姓名"
+                                           required>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="col-md-5">
+                                    <label for="validationDefault01">分组名称</label>
+                                    <input type="text" class="form-control" name="title" id="validationDefault01"
+                                           placeholder="输入分组"
+                                           required>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="col-md-5">
+                                    <label for="validationDefault01">分组名称</label>
+                                    <input type="text" class="form-control" name="title" id="validationDefault01"
+                                           placeholder="输入分组"
+                                           required>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="row">
+
+                            <div class="form-check form-check-inline col-md-5 ">
+                                <input class="form-check-input" type="checkbox" name="role"
+                                       id="inlineRadio-group" value="是否立即使用分组">
+                                <label class="form-check-label"
+                                       for="inlineRadio-group">是否立即使用分组</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary">创建用户</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+
+        function staffNameChanged(e) {
+            console.log(e.value);
+        }
+    </script>
+{{end}}
+
+
+
+
+

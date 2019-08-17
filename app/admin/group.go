@@ -15,7 +15,20 @@ import (
 
 func Group(c *gin.Context) {
 
-	c.HTML(http.StatusOK, "admin.group.list", gin.H{"groups": models.AllGroups()})
+	type gmodel struct {
+		UserId string
+		Groups []models.Group
+	}
+
+	value := gmodel{
+		Groups: models.AllGroups(),
+	}
+
+	if userId, exists := c.GetQuery("userId"); exists {
+		value.UserId = userId
+
+	}
+	c.HTML(http.StatusOK, "admin.group.list", gin.H{"value": value})
 
 }
 func GroupRoles(c *gin.Context) {
@@ -36,9 +49,39 @@ func GroupRoles(c *gin.Context) {
 		"roles":   roles,
 	})
 }
-func GroupUsers(c *gin.Context) {
+func GroupStaff(c *gin.Context) {
+
 	groupId := c.Param("groudId")
 	log.Println(groupId)
+	staffs := []*models.Staff{}
+	//models.DB().Find(&staffs,"status=? and group_id=?",0,groupId)
+	uid, exists := "", false
+	if uid, exists = c.GetQuery("userId"); exists {
+		models.DB().Find(&staffs, " group_id=? and admin_id<>?", groupId, uid)
+
+	} else {
+		models.DB().Find(&staffs, " group_id=?", groupId)
+
+	}
+	//models.DB().Find(&staffs)
+	for _, staff := range staffs {
+		admin := models.Admin{}
+		group := models.Group{}
+		role := models.Role{}
+
+		models.DB().Model(staff).Related(&group)
+		models.DB().Model(staff).Related(&role)
+		models.DB().Model(staff).Related(&admin)
+
+		staff.Role = role
+		staff.Admin = admin
+		staff.Group = group
+	}
+	if exists {
+		c.HTML(http.StatusOK, "admin.group.staff.list", gin.H{"staffs": staffs,"userId":uid})
+	}else {
+		c.HTML(http.StatusOK, "admin.group.staff.list", gin.H{"staffs": staffs})
+	}
 }
 func DoAddGroup(c *gin.Context) {
 	group := models.Group{}

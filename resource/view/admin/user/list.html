@@ -23,13 +23,12 @@
         <section class="content">
             <div class="row">
                 <div class="col-xs-12">
-                    {{if .groups}}
-                        <a class="btn btn-primary" href="#user-add-modal" data-toggle="modal" id="user-add">添加用户</a>
+                    <a class="btn btn-primary" href="#user-add-modal" data-toggle="modal" id="user-add">添加用户</a>
 
-                        <a class="btn btn-primary" href="#group-add-modal" data-toggle="modal" id="group-add">添加分组</a>
-                    {{else}}
-                        <a class="btn btn-primary" href="#group-add-modal" data-toggle="modal" id="group-add">添加分组</a>
-                    {{end}}
+                    {{/*                        <a class="btn btn-primary" href="#group-add-modal" data-toggle="modal" id="group-add">添加分组</a>*/}}
+                    {{/*                    {{else}}*/}}
+                    {{/*                        <a class="btn btn-primary" href="#group-add-modal" data-toggle="modal" id="group-add">添加分组</a>*/}}
+                    {{/*                    {{end}}*/}}
                 </div>
 
             </div>
@@ -45,8 +44,7 @@
                                         <th>姓名</th>
                                         <th class="col-md-1 col-sm-1">密码</th>
                                         <th>状态</th>
-                                        <th class="col-md-2">所属组</th>
-                                        <th class="col-md-2">职务(角色)</th>
+                                        <th class="col-md-2">管理</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -54,33 +52,26 @@
                                         <tr>
                                             <td>{{$user.ID}}</td>
                                             <td>
-                                                {{$user.UserName}}
+                                                <a href="/admin/group/list?userId={{$user.ID}}">{{$user.UserName}}</a>
                                             </td>
                                             <td>{{$user.Password}}</td>
-                                            {{if eq $user.Status 0}}
-                                                <td>正常</td>
-                                            {{else}}
-                                                <td>已上架</td>
-                                            {{end}}
-
                                             <td>
-
-                                                {{if gt $user.Group.ID 0}}
-
-                                                    <span class="badge badge-light">{{$user.Group.Title}}</span>
-                                                {{else}}
-                                                    <button class="btn btn-info">设置分组</button>
+                                                {{if eq $user.Status 0}}
+                                                    正常
+                                                {{end}}
+                                                {{if eq $user.Status 1}}
+                                                    请假
+                                                {{end}}
+                                                {{if eq $user.Status 2}}
+                                                    离职
                                                 {{end}}
                                             </td>
                                             <td>
 
-                                                {{if gt $user.Role.ID 0}}
+                                                正常 请假 调休 年假 病假 离职
 
-                                                    <span class="badge badge-light">{{$user.Role.Title}}</span>
-                                                {{else}}
-                                                    <button class="btn btn-info">设置职位(务)</button>
-                                                {{end}}
                                             </td>
+
                                         </tr>
 
                                     {{else}}
@@ -188,43 +179,22 @@
 
                         </div>
                         <div class="row">
-                            <div class="col-sm-3">
-                                <h3>分组</h3>
+                            <div class="col-sm-10">
+                                <h3>添加个人信息</h3>
                             </div>
                         </div>
                         <div class="row">
-                            {{if .groups}}
 
-                                {{range $index, $group:= .groups}}
-                                    <div class="form-check form-check-inline col-md-4 col-md-offset-1">
+                            <div class="form-check form-check-inline col-md-4 col-md-offset-1">
 
-                                        <input class="form-check-input" type="radio" name="group"
-                                               id="inlineRadio-{{$group.ID}}" value="{{$group.ID}}" required>
-                                        <label class="form-check-label"
-                                               for="inlineRadio-{{$group.ID}}">{{$group.Title}}</label>
-                                    </div>
-                                {{end}}
-                            {{end}}
-                        </div>
+                                。。。。。。。。
 
-                        <div class="row">
-                            <div class="col-sm-3">
-                                <h3>分配职位</h3>
+                                {{/*                                        <input class="form-check-input" type="radio" name="group"*/}}
+                                {{/*                                               id="inlineRadio-{{$group.ID}}" value="{{$group.ID}}" required>*/}}
+                                {{/*                                        <label class="form-check-label"*/}}
+                                {{/*                                               for="inlineRadio-{{$group.ID}}">{{$group.Title}}</label>*/}}
                             </div>
 
-                        </div>
-                        <div class="form-group row">
-                            {{if .roles}}
-                                {{range $index, $role:= .roles}}
-                                    <div class="form-check form-check-inline col-md-4 col-md-offset-1">
-                                        <input class="form-check-input" type="radio" name="role"
-                                               id="inlineRadio-{{$role.ID}}" value="{{$role.ID}}" required>
-                                        <label class="form-check-label"
-                                               for="inlineRadio-{{$role.ID}}">{{$role.Title}}</label>
-                                    </div>
-                                {{end}}
-
-                            {{end}}
                         </div>
 
 
