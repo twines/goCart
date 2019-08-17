@@ -15,6 +15,10 @@
             </h1>
             <ol class="breadcrumb">
                 <li><a href="/admin"><i class="fa fa-dashboard"></i> 首页</a></li>
+                {{if .value.UserId}}
+                    <li><a href="/admin/user/list"> 用户列表</a></li>
+
+                {{end}}
                 <li class="active">组织结构列表</li>
             </ol>
         </section>
@@ -28,10 +32,12 @@
                 </div>
 
             </div>
-            {{if  .groups }}
+            {{if  .value.Groups }}
                 <ul>
 
-                    {{range $index,$group:= .groups}}
+                    {{/*                    定义一个局部的变量*/}}
+                    {{$userId:=.value.UserId}}
+                    {{range $index,$group:= .value.Groups}}
                         <div class="box">
                             <div class="box-title">{{$group.Title}}</div>
                             <div class="box-body">
@@ -42,7 +48,12 @@
                                     <a href="role/manage/{{$group.ID}}">职位管理</a>
                                 </div>
                                 <div class=" col-md-1">
-                                    <a href="user/manage/{{$group.ID}}">人员管理</a>
+                                    {{if $userId}}
+                                        <a href="staff/manage/{{$group.ID}}?userId={{$userId}}">人员管理</a>
+
+                                    {{else}}
+                                        <a href="staff/manage/{{$group.ID}}">人员管理</a>
+                                    {{end}}
                                 </div>
                             </div>
                         </div>

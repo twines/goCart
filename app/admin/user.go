@@ -1,6 +1,7 @@
 package admin
 
 import (
+	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"goCart/models"
@@ -35,6 +36,8 @@ func DoAddUser(c *gin.Context) {
 			ss.Set("errors", errResults)
 			defer ss.Save()
 		}
+		c.Redirect(http.StatusFound, "/admin/user/list")
+
 	} else {
 
 		group := models.Group{}
@@ -45,8 +48,9 @@ func DoAddUser(c *gin.Context) {
 		admin.Password = util.EncodeMD5(admin.Password)
 		models.DB().Save(&admin)
 		models.DB().Model(&admin).Association("Groups").Append(group) //关联到组中
-	}
 
-	c.Redirect(http.StatusFound, "/admin/user/list")
+		c.Redirect(http.StatusFound, fmt.Sprintf("/admin/group/list?userId=%v", admin.ID))
+
+	}
 
 }

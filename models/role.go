@@ -13,6 +13,7 @@ type Role struct {
 	Rights []Right
 	Status int8
 	Groups []*Group `gorm:"many2many:group_roles;"`
+	Staffs []*Staff
 }
 
 func AllRoles() []Role {

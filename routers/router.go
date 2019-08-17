@@ -55,7 +55,7 @@ func InitRouter() *gin.Engine {
 
 			//为分组添加角色
 			adminGroup.GET("/group/role/manage/:groudId", admin.GroupRoles)
-			adminGroup.GET("/group/user/manage/:groudId", admin.GroupUsers)
+			adminGroup.GET("/group/staff/manage/:groudId", admin.GroupStaff)
 
 			//微信通中添加一个角色
 			adminGroup.POST("/role/add", admin.DoAddRole)

@@ -31,6 +31,7 @@ func migrate() {
 		Express{},
 		OrderProduct{},
 		Address{},
+		Staff{},
 	}
 	db.AutoMigrate(models...)
 }
