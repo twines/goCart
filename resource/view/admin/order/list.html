@@ -5,13 +5,13 @@
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                商品管理
-                <small>商品列表</small>
+                订单管理
+                <small>订单列表</small>
             </h1>
             <ol class="breadcrumb">
-                <li><a href="/admin"><i class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a href="/admin/product/list">商品管理</a></li>
-                <li class="active">商品列表</li>
+                <li><a href="/admin/"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li><a href="/admin/order/list">订单管理</a></li>
+                <li class="active">订单列表</li>
             </ol>
         </section>
         <!-- Main content -->
@@ -31,6 +31,7 @@
                                     <thead>
                                     <tr>
                                         <th>id</th>
+                                        <th>下单人</th>
                                         <th>收件人姓名</th>
                                         <th>收件人电话</th>
                                         <th>收件人地址</th>
@@ -43,14 +44,14 @@
                                     {{range $k,$order:=.orderSlice}}
                                         <tr>
                                             <td>{{$order.ID}}</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td>{{$order.User.UserName}}</td>
+                                            <td>{{$order.Address.UserName}}</td>
+                                            <td>{{$order.Address.Mobile}}</td>
+                                            <td>{{$order.Address.Street}}</td>
                                             <td>{{$order.OrderNumber}}</td>
                                             <td>{{$order.Status}}</td>
+                                            <td><a class="btn btn-danger">删除</a><a class="btn btn-primary">议价</a></td>
                                         </tr>
-                                    {{else}}
-
                                     {{end}}
                                     </tbody>
                                 </table>
@@ -72,27 +73,8 @@
         </section>
         <!-- /.content -->
     </div>
+    {{template "admin.footer"}}
     <script>
-        console.debug({{.productList}});
-
-        function ProductEditCheckNum(e) {
-            var inputValue = e.value;
-            var placeHolder = e.placeholder;
-            console.log(inputValue);
-            var regular = /^[0-9]+(.[0-9]{0,2})?$/;
-            if (regular.test(inputValue.toString())) {
-                console.log("输入合法");
-
-            } else {
-                console.log("输入格式不正确");
-                e.value = "输入数据格式不正确";
-                setTimeout(function () {
-                    e.value = placeHolder;
-                }, 1000);
-            }
-
-        }
 
     </script>
-    {{template "admin.footer"}}
 {{end}}

@@ -8,6 +8,7 @@ type Order struct {
 	UserId       uint   `json:"user_id" gorm:"index;not null"`
 	OrderNumber  string `json:"order_number" gorm:"UNIQUE_INDEX;not null"`
 	AddressId    uint   `json:"address_id"`
-	OrderProduct []*OrderProduct
-	Address      *Address
+	OrderProduct []OrderProduct
+	Address      Address
+	User         User
 }
