@@ -60,12 +60,13 @@
                                             <td>{{$product.Price}}</td>
                                             <td>{{$product.Sku}}</td>
                                             <td>{{$product.Stock}}</td>
-                                            {{if eq $product.Status 1}}
-                                                <td>已下架</td>
-                                            {{else}}
-                                                <td>已上架</td>
-                                            {{end}}
-
+                                            <td>
+                                                {{if eq $product.Status 1}}
+                                                    已下架
+                                                {{else}}
+                                                    已上架
+                                                {{end}}
+                                            </td>
                                             <td>
                                                 {{if eq $product.Status 0}}
                                                     <button class="btn btn-danger"

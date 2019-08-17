@@ -25,6 +25,7 @@ func main() {
 	gob.Register(models.Admin{})
 	gob.Register(models.User{})
 	gob.Register(models.Product{})
+	gob.Register(models.Express{})
 
 	gin.SetMode(setting.ServerSetting.RunMode)
 	router := routers.InitRouter()

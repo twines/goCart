@@ -93,6 +93,12 @@ func InitRouter() *gin.Engine {
 
 			//订单列表
 			adminGroup.GET("/order/list", admin.OrderList)
+
+			//快递公司列表
+			adminGroup.GET("/express/list", admin.GetExpressList)
+			//添加快递公司
+			adminGroup.GET("/express/add", admin.AddExpress)
+			adminGroup.POST("/express/add", admin.DoAddExpress)
 		}
 	}
 	//web前端
