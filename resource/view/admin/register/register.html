@@ -1,0 +1,219 @@
+{{define "admin.register"}}
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>AdminLTE 2 | Log in</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <!-- Bootstrap 3.3.7 -->
+        <link rel="stylesheet" href="/static/components/bootstrap/dist/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="/static/components/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="/static/components/Ionicons/css/ionicons.min.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="/static/dist/css/AdminLTE.min.css">
+        <!-- iCheck -->
+        <link rel="stylesheet" href="/static/plugins/iCheck/square/blue.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Google Font -->
+        <link rel="stylesheet"
+              href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+    </head>
+    <body>
+
+    {{template "admin.register.content" .}}
+    </body>
+    </html>
+{{end}}
+
+{{define "admin.register.content"}}
+    <section class="content">
+
+        <div class="register-box">
+            <div class="register-logo">
+                <a href="../../index2.html"><b>Admin</b>LTE</a>
+            </div>
+
+            <div class="register-box-body">
+                <p class="login-box-msg">新用户注册{{.name}}</p>
+                  <form action="/admin/register" method="post" onsubmit="return checkForm();">
+                    <div class="form-group has-feedback">
+                        <input id="userName" type="text" class="form-control" name="name" placeholder="用户名"
+                               onBlur="checkName()"
+                               onfocus="onFocus(this)"
+                               required>
+                        <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                        {{if .errors}}
+                            {{if .errors.nameError}}
+                                <span id="nameError"  >{{.errors.nameError}}</span>
+                            {{end}}
+                        {{else}}
+
+                            <span id="nameError" hidden>用户名至少三位</span>
+                        {{end}}
+
+                    </div>
+
+                    <div class="form-group has-feedback">
+                        <input id="userCode" type="text" class="form-control" name="code" placeholder="邀请码"
+                               onBlur="checkCode()"
+                               onfocus="onFocus(this)"
+                               required>
+                        <span class="glyphicon  glyphicon-eur form-control-feedback"></span>
+                        {{if .errors}}
+                            {{if .errors.codeError}}
+                                <span id="codeError">{{.errors.codeError}}</span>
+                            {{end}}
+                        {{else}}
+
+                            <span id="codeError" hidden>请输入邀请码</span>
+                        {{end}}
+
+                    </div>
+
+
+                    <div class="form-group has-feedback">
+                        <input id="password" type="password" name="password" class="form-control" placeholder="密码"
+                               onfocus="onFocus(this)"
+                               onblur="checkPassword()" required>
+                        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                        {{if .errors}}
+
+                            {{if .errors.passwordError}}
+                                <span id="passwordError"  >{{.errors.passwordError}}</span>
+                            {{end}}
+                        {{else}}
+                            <span id="passwordError" hidden>密码至少6位</span>
+                        {{end}}
+                    </div>
+                    <div class="form-group has-feedback">
+                        <input id="retryPassword" type="password" name="retryPassword" class="form-control"
+                               onfocus="onFocus(this)"
+                               onblur="checkRetryPassword()" placeholder="确认密码"
+                               required>
+                        <span class="glyphicon glyphicon-log-in form-control-feedback"></span>
+                        {{if .errors}}
+                            {{if .errors.passwordError}}
+                                <span id="retryPasswordError"  >{{.errors.retryPasswordError}}</span>
+                            {{end}}
+                        {{else}}
+
+                            <span id="retryPasswordError" hidden>两次输入的密码不一致</span>
+                        {{end}}
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-8" style="visibility: hidden">
+                            <div class="checkbox icheck">
+                                <label>
+                                    <div class="icheckbox_square-blue" style="position: relative;"
+                                         aria-checked="false" aria-disabled="false"><input type="checkbox"
+                                                                                           style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;">
+                                        <ins class="iCheck-helper"
+                                             style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;"></ins>
+                                    </div>
+                                    I agree to the <a href="#">terms</a>
+                                </label>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-xs-4 text-center">
+                            <button type="submit" class="btn btn-primary btn-block btn-flat">注册</button>
+                            <a  href="/admin/login" class="text-center">已有账号</a>
+                        </div>
+
+                        <!-- /.col -->
+                    </div>
+                </form>
+
+            </div>
+            <!-- /.form-box -->
+        </div>
+
+
+    </section>
+
+    <script>
+        var err ={{.errors}};
+        console.log(err);
+function xx(e) {
+    console.log(e);
+}
+xx({{.errors}});
+
+        function onFocus(e) {
+            var es = e.nextElementSibling.nextElementSibling;
+            es.setAttribute("hidden", "hidden");
+
+            console.log(es);
+        }
+
+
+        function checkCode() {
+            var userName = document.getElementById("userCode").value;
+            if (userName.length >= 3) {
+                document.getElementById("codeError").setAttribute("hidden", "hidden");
+            } else {
+                document.getElementById("codeError").removeAttribute("hidden");
+            }
+        }
+
+        function checkName() {
+            var userName = document.getElementById("userName").value;
+            if (userName.length >= 3) {
+                document.getElementById("nameError").setAttribute("hidden", "hidden");
+            } else {
+                document.getElementById("nameError").removeAttribute("hidden");
+            }
+        }
+
+        function checkPassword() {
+            var password = document.getElementById("password").value;
+            if (password.length < 6) {
+                document.getElementById("passwordError").removeAttribute("hidden");
+            } else {
+                document.getElementById("passwordError").setAttribute("hidden", "hidden");
+            }
+        }
+
+        function checkRetryPassword() {
+            var password = document.getElementById("password").value;
+            var retryPassword = document.getElementById("retryPassword").value;
+            if (password != retryPassword) {
+                document.getElementById("retryPasswordError").removeAttribute("hidden");
+            } else {
+                document.getElementById("retryPasswordError").setAttribute("hidden", "hidden");
+            }
+        }
+
+        function checkForm() {
+            var rev = true;
+
+            var userName = document.getElementById("userName").value;
+            var password = document.getElementById("password").value;
+            var retryPassword = document.getElementById("retryPassword").value;
+            if (userName.length < 3) {
+                console.log("yon" + userName);
+                document.getElementById("nameError").removeAttribute("hidden");
+            }
+            if (userName.length < 3 || password.length < 6 || retryPassword.length < 6) {
+                rev = false;
+            }
+            if (password != retryPassword) {
+                rev = false;
+            }
+
+            return rev;
+        }
+
+    </script>
+{{end}}

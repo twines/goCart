@@ -32,6 +32,7 @@ func migrate() {
 		OrderProduct{},
 		Address{},
 		Staff{},
+		InvitationCode{},
 	}
 	db.AutoMigrate(models...)
 }

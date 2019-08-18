@@ -50,6 +50,10 @@ func DoLogin(c *gin.Context) {
 			session.Set("errs", map[string]string{"Password": "密码错误"})
 			session.Set("admin", admin)
 			c.Redirect(http.StatusFound, "/admin/login")
+		} else  if admin.Status ==0 {
+			session.Set("errs", map[string]string{"Password": "用户状态异常"})
+			session.Set("admin", admin)
+			c.Redirect(http.StatusFound, "/admin/login")
 		} else {
 			session.Delete("errs")
 			session.Delete("admin")

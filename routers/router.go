@@ -36,6 +36,9 @@ func InitRouter() *gin.Engine {
 		//admin未登录
 		{
 			adminGroup.GET("/login", admin.Login)
+			adminGroup.GET("/register", admin.UserRegister)
+			adminGroup.POST("/register", admin.DoRegister)
+
 			adminGroup.POST("/login", admin.DoLogin)
 			adminGroup.GET("/", admin.Index)
 
@@ -68,10 +71,13 @@ func InitRouter() *gin.Engine {
 
 			//<<<<<<<<<==============================
 
+
+			adminGroup.GET("/invicator",admin.RednderInvicatorCode)
 			//用户列表
 			adminGroup.GET("/user/list", admin.User)
 			adminGroup.GET("/user/add", admin.AddUserPage)
 			adminGroup.POST("/user/add", admin.DoAddUser)
+			adminGroup.GET("/user/profile", admin.UserProfile)
 
 			//商品列表
 			adminGroup.GET("/product/list", admin.GetProductList)

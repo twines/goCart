@@ -78,3 +78,9 @@ func DoAddUser(c *gin.Context) {
 	}
 
 }
+
+func UserProfile(c *gin.Context) {
+
+	c.HTML(http.StatusOK, "admin.profile", gin.H{})
+
+}

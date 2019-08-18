@@ -6,6 +6,9 @@ type Admin struct {
 	GroupID uint     `json:"password" form:"group" validate:"required,gt=1"`
 
 	Title   string   //职位名称
+
+	InvitationCodes []InvitationCode
+
 }
 
 func AdminAll() []User {
